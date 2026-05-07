@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>The Argument Operating Theatre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #1A1A24; }
+    /* Sizing chain — every wrapper must claim full viewport height so the
+       Phaser parent (#game-container) sees a real height to FIT into. Without
+       explicit `height: 100%` on `<main>`, the chain breaks: main becomes
+       content-sized, #game-container's `height: 100%` resolves to 0/auto, and
+       Phaser's FIT mode letterboxes inside whatever short box the canvas
+       ends up in. */
+    main { width: 100%; height: 100%; display: block; }
+    #game-container { width: 100%; height: 100%; }
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+    /* Skip link — visible only when focused */
+    .skip-link {
+      position: absolute; top: -999px; left: 8px; z-index: 9999;
+      background: #FFFFFF; color: #1A1A24;
+      padding: 12px 20px; font-family: sans-serif; font-weight: bold;
+      text-decoration: none; border-radius: 4px;
+    }
+    .skip-link:focus { top: 8px; outline: 3px solid #FFFFFF; outline-offset: 3px; }
+    /* Global keyboard focus indicator for every DOM button + input layered
+       on the canvas. WCAG 2.4.7 — without this, keyboard users can't see
+       where their focus is. */
+    button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+      outline: 3px solid #FFFFFF !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.6) !important;
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip link — first thing in tab order -->
+  <a href="#game-container" class="skip-link">Skip to game</a>
+
+  <!-- Page heading + landmarks for screen-reader orientation. The visible
+       game UI lives inside the canvas (and DOM overlays positioned on top
+       of it); this header is visually hidden but exposes the page's
+       semantic structure to assistive tech. -->
+  <header>
+    <h1 class="visually-hidden">The Argument Operating Theatre — SACE Stage 1 Philosophy</h1>
+  </header>
+
+  <!-- Screen reader live regions (Phaser canvas is opaque to AT) -->
+  <div id="hud-polite"   aria-live="polite"   class="visually-hidden"></div>
+  <div id="hud-assertive" aria-live="assertive" class="visually-hidden"></div>
+
+  <main aria-label="Argument Operating Theatre game">
+    <!-- Phaser parent container — kept as <div> so Phaser's DOM-overlay
+         system (createContainer:true) doesn't get confused by main's
+         implicit landmark roles when injecting its overlay sub-div. -->
+    <div id="game-container" tabindex="-1"></div>
+  </main>
+
+  <!-- Phaser 3 from CDN — no build step required -->
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.min.js"></script>
+
+  <!-- Game modules (load order matters — core first, then state, then scenes).
+       Cache-buster ?v=12 covers card text sizing + briefing typography. -->
+  <script src="src/core/constants.js?v=12"></script>
+  <script src="src/core/event-bus.js?v=12"></script>
+  <script src="src/state.js?v=12"></script>
+  <script src="src/boot.js?v=12"></script>
+  <script src="src/pod-login.js?v=12"></script>
+  <script src="src/hub.js?v=12"></script>
+  <script src="src/l1-scene.js?v=12"></script>
+  <script src="src/l2-scene.js?v=12"></script>
+  <script src="src/l3-scene.js?v=12"></script>
+  <script src="src/final-reveal.js?v=12"></script>
+
+  <script>
+    // 1920×1080 design canvas, FIT-scaled to fill any display.
+    // Desktop classroom projection (per Peter's CLAUDE.md sizing rules).
+    const game = window.game = new Phaser.Game({
+      type: Phaser.AUTO,
+      width: GAME_DIM.W,
+      height: GAME_DIM.H,
+      parent: 'game-container',
+      backgroundColor: COLORS.BG_INK.str,
+      dom: { createContainer: true },          // enable this.add.dom() overlays
+      scale: {
+        // FIT mode + matching colors: when viewport aspect ≠ 16:9, Phaser
+        // produces a small symmetric letterbox in the body bg colour. Because
+        // body { background: #1A1A24 } matches the canvas backgroundColor
+        // (BG_INK) AND the chamber-bg edge tone, the letterbox is visually
+        // invisible at typical classroom-laptop aspects. Requires the CSS
+        // sizing chain (html→body→main→#game-container all claim 100% height)
+        // for the canvas to fit a real parent box.
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+      },
+      scene: [
+        BootScene, PodLoginScene, HubScene,
+        L1Scene, L2Scene, L3Scene, FinalRevealScene,
+      ],
+    });
+
+    // Label the canvas for screen readers (real interactive UI is DOM
+    // elements over the canvas; this just describes the play area).
+    game.events.once('ready', () => {
+      const cv = document.querySelector('#game-container canvas');
+      if (cv) cv.setAttribute('aria-label',
+        'Argument Operating Theatre — game area. Use the on-screen buttons and keyboard shortcuts.');
+    });
+
+    // Autosave on tab-blur / page-hide (school devices get yanked).
+    function _autosave() {
+      try {
+        const sceneMgr = game.scene;
+        const active = sceneMgr.getScenes(true)[0];
+        if (active && active.state && active.state.podCode) {
+          StateManager.save(active.state);
+        }
+      } catch {}
+    }
+    window.addEventListener('blur', _autosave);
+    window.addEventListener('pagehide', _autosave);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') _autosave();
+    });
+  </script>
+</body>
+</html>

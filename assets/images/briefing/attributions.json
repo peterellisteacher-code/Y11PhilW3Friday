@@ -1,0 +1,20 @@
+{
+  "sign_crocodile.jpg": {
+    "source": "unsplash",
+    "photographer": "Markus Kammermann",
+    "url": "https://unsplash.com/photos/A8pvMx7in_g",
+    "license": "Unsplash License (free to use)"
+  },
+  "sign_wet_floor.jpg": {
+    "source": "pexels",
+    "photographer": "Miff Ibra",
+    "url": "https://www.pexels.com/photo/32842045/",
+    "license": "Pexels License (free to use)"
+  },
+  "sign_no_smoking.jpg": {
+    "source": "pexels",
+    "photographer": "Vanessa Valkhof",
+    "url": "https://www.pexels.com/photo/29790833/",
+    "license": "Pexels License (free to use)"
+  }
+}

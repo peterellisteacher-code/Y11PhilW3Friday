@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-05-07",
+  "total_cost_usd": 0.64,
+  "animations": [
+    {
+      "key": "patient_l1_anim",
+      "file": "patient_l1_anim.png",
+      "source_still": "argument_patient_l1.png",
+      "style": "rd_advanced_animation__idle",
+      "action": "idle",
+      "frame_width": 192,
+      "frame_height": 192,
+      "frame_count": 4,
+      "sheet_layout": "2x2",
+      "sheet_width": 384,
+      "sheet_height": 384,
+      "size_kb": 66.1,
+      "cost_usd": 0.14,
+      "prompt": "anatomical argument patient on surgical table, gentle breathing idle animation",
+      "notes": "Horizontal 2x2 grid; parse as row-major: frame 0 top-left, frame 1 top-right, frame 2 bottom-left, frame 3 bottom-right"
+    },
+    {
+      "key": "patient_l2_anim",
+      "file": "patient_l2_anim.png",
+      "source_still": "argument_patient_l2.png",
+      "style": "rd_advanced_animation__custom_action",
+      "action": "custom_action",
+      "frame_width": 192,
+      "frame_height": 192,
+      "frame_count": 4,
+      "sheet_layout": "2x2",
+      "sheet_width": 384,
+      "sheet_height": 384,
+      "size_kb": 76.8,
+      "cost_usd": 0.25,
+      "prompt": "patient grimacing in distress, slight twitching of head and shoulders",
+      "notes": "Horizontal 2x2 grid; parse as row-major: frame 0 top-left, frame 1 top-right, frame 2 bottom-left, frame 3 bottom-right. RD re-interpreted scene context toward operating theatre view."
+    },
+    {
+      "key": "patient_l3_anim",
+      "file": "patient_l3_anim.png",
+      "source_still": "argument_patient_l3.png",
+      "style": "rd_advanced_animation__custom_action",
+      "action": "custom_action",
+      "frame_width": 192,
+      "frame_height": 192,
+      "frame_count": 6,
+      "sheet_layout": "3x2",
+      "sheet_width": 576,
+      "sheet_height": 384,
+      "size_kb": 137.4,
+      "cost_usd": 0.25,
+      "prompt": "cartoon character bouncing in place, squash and stretch animation, exaggerated motion",
+      "notes": "3x2 grid; parse as row-major: frames 0-2 top row, frames 3-5 bottom row. Pastel coral/pink palette matches l3 still style."
+    }
+  ]
+}

@@ -1,0 +1,204 @@
+{
+  "generated_at": "2026-05-07",
+  "total_cost_usd": 1.697,
+  "sprites": [
+    {
+      "key": "badge_scalpel",
+      "file": "badge_scalpel.png",
+      "size": "128x128",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.019,
+      "prompt": "pixel art surgical scalpel on round brass medallion, top-down view, parchment cream background inside circle, brass border, transparent outer background, simple clean game UI icon, vintage operating theatre aesthetic, brushed brass #C8B68A palette, sterile teal accent"
+    },
+    {
+      "key": "badge_syringe",
+      "file": "badge_syringe.png",
+      "size": "128x128",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.019,
+      "prompt": "pixel art medical syringe on round brass medallion, top-down view, parchment cream interior, brass border, transparent outer background, clean game UI icon, vintage operating theatre aesthetic, brushed brass palette"
+    },
+    {
+      "key": "badge_microscope",
+      "file": "badge_microscope.png",
+      "size": "128x128",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.019,
+      "prompt": "pixel art vintage microscope on round brass medallion, top-down view, parchment cream interior, brass border, transparent outer background, clean game UI icon, vintage operating theatre aesthetic, brushed brass palette, sterile teal accent"
+    },
+    {
+      "key": "badge_clipboard",
+      "file": "badge_clipboard.png",
+      "size": "128x128",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.019,
+      "prompt": "pixel art surgical clipboard with paper notes on round brass medallion, top-down view, parchment cream interior, brass border, transparent outer background, clean game UI icon, vintage operating theatre aesthetic, brushed brass palette"
+    },
+    {
+      "key": "evidence_premise_card",
+      "file": "evidence_premise_card.png",
+      "size": "128x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.021,
+      "prompt": "pixel art parchment index card with horizontal text lines and a small P stamp in vermillion red, vintage operating-room file card aesthetic, brass corner clip, transparent background, tall card format, aged paper texture"
+    },
+    {
+      "key": "evidence_conclusion_card",
+      "file": "evidence_conclusion_card.png",
+      "size": "128x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.021,
+      "prompt": "pixel art parchment index card with a single bold horizontal rule and the therefore symbol in vermillion at the top, vintage operating-room file card aesthetic, brass corner clip, transparent background, tall card format, aged paper texture"
+    },
+    {
+      "key": "evidence_valid_seal",
+      "file": "evidence_valid_seal.png",
+      "size": "128x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.021,
+      "prompt": "pixel art red wax seal stamped VALID in capitals on parchment background, ribbon underneath, vintage court-record aesthetic, transparent background, tall card format, deep crimson wax texture, gold ribbon"
+    },
+    {
+      "key": "evidence_counterexample_card",
+      "file": "evidence_counterexample_card.png",
+      "size": "128x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.021,
+      "prompt": "pixel art parchment evidence card with a small magnifying glass and a circled X in blood red, vintage court-exhibit aesthetic, transparent background, tall card format, aged yellowed paper"
+    },
+    {
+      "key": "evidence_newspaper_clipping",
+      "file": "evidence_newspaper_clipping.png",
+      "size": "128x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.021,
+      "prompt": "pixel art torn newspaper clipping with column lines and a single highlighted headline strip in coral pink, slightly yellowed paper, transparent background, tall card format, rough torn edges"
+    },
+    {
+      "key": "evidence_rebuild_card",
+      "file": "evidence_rebuild_card.png",
+      "size": "128x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.021,
+      "prompt": "pixel art parchment card showing the standard-form layout with horizontal rule and three small bullet lines, brass corner clip, transparent background, tall card format, vintage operating-room file card aesthetic, aged paper"
+    },
+    {
+      "key": "stamp_valid",
+      "file": "stamp_valid.png",
+      "size": "192x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.023,
+      "prompt": "pixel art rubber stamp ink mark reading VALID in bold capitals, dark green ink, slightly tilted angle, transparent background, distressed edge, worn rubber stamp texture, vintage official document aesthetic"
+    },
+    {
+      "key": "stamp_invalid",
+      "file": "stamp_invalid.png",
+      "size": "192x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.023,
+      "prompt": "pixel art rubber stamp ink mark reading INVALID in bold capitals, dark red ink, slightly tilted angle, transparent background, distressed edge, worn rubber stamp texture, vintage official document aesthetic"
+    },
+    {
+      "key": "stamp_sound",
+      "file": "stamp_sound.png",
+      "size": "192x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.023,
+      "prompt": "pixel art rubber stamp ink mark reading SOUND in bold capitals, brass gold ink, slightly tilted angle, transparent background, distressed edge, worn rubber stamp texture, vintage official document aesthetic"
+    },
+    {
+      "key": "stamp_unsound",
+      "file": "stamp_unsound.png",
+      "size": "192x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.023,
+      "prompt": "pixel art rubber stamp ink mark reading UNSOUND in bold capitals, dark vermillion ink, slightly tilted angle, transparent background, distressed edge, worn rubber stamp texture, vintage official document aesthetic"
+    },
+    {
+      "key": "stamp_cogent",
+      "file": "stamp_cogent.png",
+      "size": "192x192",
+      "style": "rd_fast__game_asset",
+      "cost_usd": 0.023,
+      "prompt": "pixel art rubber stamp ink mark reading COGENT in bold capitals, deep teal ink, slightly tilted angle, transparent background, distressed edge, worn rubber stamp texture, vintage official document aesthetic"
+    },
+    {
+      "key": "argument_patient_l1",
+      "file": "argument_patient_l1.png",
+      "size": "192x192",
+      "style": "rd_pro__default",
+      "cost_usd": 0.18,
+      "prompt": "pixel art anatomical sketch of an argument as a patient on a surgical table, calm and inert, parchment skin, vermillion red anatomy lines marking premise and conclusion zones, top-down view, transparent background, forensic textbook illustration style, vintage operating theatre aesthetic, sterile teal and parchment palette, brass instrument details"
+    },
+    {
+      "key": "argument_patient_l2",
+      "file": "argument_patient_l2.png",
+      "size": "192x192",
+      "style": "rd_pro__default",
+      "cost_usd": 0.18,
+      "prompt": "pixel art anatomical patient argument on a surgical table but distressed and grungy, blood red rough lines, photocopy texture, punk-rock anti-establishment aesthetic, top-down view, transparent background, scratchy crosshatch marks, torn edge details, high contrast dark ink on pale background"
+    },
+    {
+      "key": "argument_patient_l3",
+      "file": "argument_patient_l3.png",
+      "size": "192x192",
+      "style": "rd_pro__default",
+      "cost_usd": 0.18,
+      "prompt": "pixel art anatomical patient argument on a surgical table in pastel cartoon style, soft pink and coral outlines, knowing-cute Powerpuff Girls aesthetic, top-down view, transparent background, hard black contours, blossom coral and cream palette, playful chibi proportions"
+    },
+    {
+      "key": "badge_scalpel",
+      "file": "badge_scalpel.png",
+      "size": "128x128",
+      "size_kb": 12.6,
+      "style": "rd_pro__default",
+      "cost_usd": 0.18,
+      "generated_at": "2026-05-07",
+      "prompt": "pixel art surgical scalpel, scalpel blade with single straight steel edge, scalpel handle in white plastic, surgeon's scalpel as held by a doctor, isolated scalpel on dark circular brass medallion, vintage operating-theatre style scalpel",
+      "notes": "Regenerated 2026-05-07 from rd_pro__default at 128x128 to match badge_syringe dimensions. No retry required — first output was correct scalpel."
+    },
+    {
+      "key": "patient_l1_anim",
+      "file": "patient_l1_anim.png",
+      "size": "384x384",
+      "size_kb": 66.1,
+      "style": "rd_advanced_animation__idle",
+      "cost_usd": 0.14,
+      "generated_at": "2026-05-07",
+      "frame_width": 192,
+      "frame_height": 192,
+      "frame_count": 4,
+      "sheet_layout": "2x2",
+      "prompt": "anatomical argument patient on surgical table, gentle breathing idle animation"
+    },
+    {
+      "key": "patient_l2_anim",
+      "file": "patient_l2_anim.png",
+      "size": "384x384",
+      "size_kb": 76.8,
+      "style": "rd_advanced_animation__custom_action",
+      "cost_usd": 0.25,
+      "generated_at": "2026-05-07",
+      "frame_width": 192,
+      "frame_height": 192,
+      "frame_count": 4,
+      "sheet_layout": "2x2",
+      "prompt": "patient grimacing in distress, slight twitching of head and shoulders"
+    },
+    {
+      "key": "patient_l3_anim",
+      "file": "patient_l3_anim.png",
+      "size": "576x384",
+      "size_kb": 137.4,
+      "style": "rd_advanced_animation__custom_action",
+      "cost_usd": 0.25,
+      "generated_at": "2026-05-07",
+      "frame_width": 192,
+      "frame_height": 192,
+      "frame_count": 6,
+      "sheet_layout": "3x2",
+      "prompt": "cartoon character bouncing in place, squash and stretch animation, exaggerated motion"
+    }
+  ],
+  "skipped": []
+}

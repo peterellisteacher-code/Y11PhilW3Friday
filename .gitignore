@@ -1,0 +1,15 @@
+# OS / editor metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Local dev artifacts
+.cache/
+node_modules/
+*.log
