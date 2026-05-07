@@ -13,6 +13,7 @@ class PodLoginScene extends Phaser.Scene {
     this._drawLoginPanel();
     this._drawLetterSlots();
     this._drawHint('Type your 4-letter pod code, then press Enter');
+    this._drawPodSelection();
 
     this._keyHandler = (event) => this._onKey(event);
     this.input.keyboard.on('keydown', this._keyHandler);
@@ -38,11 +39,13 @@ class PodLoginScene extends Phaser.Scene {
   _drawLoginPanel() {
     this._loginTexts = [];
 
+    // Panel is taller (840px) than the original 720 to fit the pod-selection
+    // section (4 pod-code boxes + group rules) below the letter slots.
     const g = this.add.graphics();
     g.fillStyle(0x12121A);
-    g.fillRoundedRect(560, 180, 800, 720, 8);
+    g.fillRoundedRect(560, 180, 800, 840, 8);
     g.lineStyle(2, COLORS.BRASS.num);
-    g.strokeRoundedRect(560, 180, 800, 720, 8);
+    g.strokeRoundedRect(560, 180, 800, 840, 8);
     g.fillStyle(COLORS.BRASS.num);
     g.fillRect(560, 180, 800, 6);
     this._loginTexts.push(g);
@@ -75,19 +78,101 @@ class PodLoginScene extends Phaser.Scene {
     }).setOrigin(0.5);
     this._loginTexts.push(t3);
 
-    // Fix 2: hint text below the code-entry area
-    const hintMsg = this.add.text(
-      960, 600,
-      'Your 4-letter code comes from your pod card. Ask Mr Ellis if you don\'t have one.',
-      {
-        fontFamily: FONTS.UI || FONTS.BODY,
-        fontSize: '17px',
+    // (No "ask Mr Ellis" hint — the 4 pod codes are displayed on-screen
+    // via _drawPodSelection() and students negotiate amongst themselves.)
+  }
+
+  // ── POD SELECTION (4 codes + group rules) ─────────────────────────────────
+  /**
+   * Renders the 4 pod-code boxes + group-formation rules below the letter
+   * slots. Boxes are clickable: click fills the code letters and highlights
+   * all 4 slots, then student presses Enter to proceed. Tracked in
+   * `_loginTexts` so teardown to badge phase removes them cleanly.
+   */
+  _drawPodSelection() {
+    const codes = ['AQUA', 'BOLD', 'CALM', 'FIRE'];
+    const boxW = 130, boxH = 80, gap = 30;
+    const totalW = codes.length * boxW + (codes.length - 1) * gap;
+    const startX = (GAME_DIM.W - totalW) / 2;
+    const boxY = 790;
+
+    // Separator above the pod-selection area
+    const sep = this.add.graphics();
+    sep.lineStyle(1, COLORS.BRASS.num, 0.35);
+    sep.lineBetween(620, 705, 1300, 705);
+    this._loginTexts.push(sep);
+
+    // Heading — primary feedback / instruction tier
+    const heading = this.add.text(960, 745,
+      'CHOOSE A POD — negotiate with your group', {
+        fontFamily: FONTS.HERO,
+        ...TYPE.LARGE,
+        color: COLORS.BRASS.str,
+        letterSpacing: 2,
+      }).setOrigin(0.5);
+    this._loginTexts.push(heading);
+
+    // 4 pod-code boxes (clickable)
+    codes.forEach((code, i) => {
+      const x = startX + i * (boxW + gap);
+
+      const boxG = this.add.graphics();
+      const drawBox = (hovered) => {
+        boxG.clear();
+        boxG.fillStyle(hovered ? 0x1A1A30 : 0x12121A);
+        boxG.fillRoundedRect(x, boxY, boxW, boxH, 6);
+        boxG.lineStyle(2, COLORS.BRASS.num, hovered ? 1 : 0.7);
+        boxG.strokeRoundedRect(x, boxY, boxW, boxH, 6);
+      };
+      drawBox(false);
+      this._loginTexts.push(boxG);
+
+      const codeText = this.add.text(x + boxW / 2, boxY + boxH / 2, code, {
+        fontFamily: FONTS.HERO,
+        fontSize: '32px',
+        color: COLORS.PARCH.str,
+        letterSpacing: 4,
+      }).setOrigin(0.5);
+      this._loginTexts.push(codeText);
+
+      const zone = this.add.zone(x + boxW / 2, boxY + boxH / 2, boxW, boxH)
+        .setInteractive({ useHandCursor: true });
+      zone.on('pointerover', () => drawBox(true));
+      zone.on('pointerout',  () => drawBox(false));
+      zone.on('pointerdown', () => this._selectPodCode(code));
+      this._loginTexts.push(zone);
+    });
+
+    // Group-formation rules
+    const rulesPrimary = this.add.text(960, 920,
+      'Four pods · Two people per pod', {
+        fontFamily: FONTS.BODY,
+        ...TYPE.BODY,
+        color: COLORS.PARCH.str,
+      }).setOrigin(0.5);
+    this._loginTexts.push(rulesPrimary);
+
+    const rulesSecondary = this.add.text(960, 965,
+      'If there\'s an odd number, one person works alone or with the teacher', {
+        fontFamily: FONTS.BODY,
+        ...TYPE.SMALL,
         color: COLORS.MUTED.str,
-        align: 'center',
-        wordWrap: { width: 680 },
-      }
-    ).setOrigin(0.5);
-    this._loginTexts.push(hintMsg);
+      }).setOrigin(0.5);
+    this._loginTexts.push(rulesSecondary);
+  }
+
+  /** Click-to-select on a pod-code box: fill the letters and highlight
+   *  every slot. Student presses Enter to proceed (matching the keyboard
+   *  flow), so the existing _onCodeKey handler stays in charge. */
+  _selectPodCode(code) {
+    this.codeLetters = code.split('');
+    this._updateDisplay();
+    for (let i = 0; i < 4; i++) this._highlightSlot(i, true);
+    this._drawHint('Press Enter to proceed');
+    announce(
+      `Pod ${code} selected. Press Enter to enter the operating theatre, ` +
+      `or click another pod to change your selection.`, true
+    );
   }
 
   // ── LETTER SLOTS ───────────────────────────────────────────────────────────

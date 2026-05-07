@@ -243,7 +243,9 @@ class L3Scene extends Phaser.Scene {
       label.appendChild(chk);
       label.appendChild(span);
       listEl.appendChild(label);
-      checks.push({ el: chk, correct: stmt.correct });
+      // Surface stmt text + why so _submitQ1 can render per-statement diagnostics
+      // (the `why` data was previously defined but unused in feedback).
+      checks.push({ el: chk, correct: stmt.correct, text: stmt.text, why: stmt.why });
     });
 
     const listDom = this.add.dom(GAME_DIM.W / 2, qY + 220, listEl);
@@ -284,25 +286,28 @@ class L3Scene extends Phaser.Scene {
       announce('Not quite — diagnostic feedback shown.', true);
       if (!PREFERS_REDUCED_MOTION) this._flashRed();
 
-      // Diagnostic feedback — name each wrong tick, paraphrase the why
+      // Diagnostic feedback — name each wrong tick AND each missed premise,
+      // surfacing the per-statement `why` so the diagnostic actually teaches
+      // (was generic "see the article" before, despite the why-data existing).
       const wrongTicks  = checks.filter(c =>  c.el.checked && !c.correct);
       const missedTicks = checks.filter(c => !c.el.checked &&  c.correct);
       const lines = [];
       if (wrongTicks.length) {
-        lines.push('You ticked things that AREN\'T premises of this argument:');
+        lines.push('You ticked statements that AREN\'T premises of this argument:');
         wrongTicks.forEach(c => {
-          const stmt = checks.indexOf(c);
-          // Find the matching statement to get its `why` note
-          // (we kept the `why` attached on the data structure — fetch it)
-          lines.push(`  ✗ Statement ${stmt + 1} — see the article: it\'s either context, the conclusion, or simply not part of the rebuild.`);
+          lines.push(`  ✗ "${c.text}"`);
+          lines.push(`     ${c.why}`);
         });
       }
       if (missedTicks.length) {
-        lines.push((wrongTicks.length ? '\n' : '') +
-          'You missed ' + missedTicks.length + ' premise' + (missedTicks.length > 1 ? 's' : '') +
-          ' that ARE in the standard-form rebuild on slide 7.');
+        if (wrongTicks.length) lines.push('');
+        lines.push(`You missed ${missedTicks.length} premise${missedTicks.length > 1 ? 's' : ''} that ARE in the standard-form rebuild:`);
+        missedTicks.forEach(c => {
+          lines.push(`  ⊘ "${c.text}"`);
+          lines.push(`     ${c.why}`);
+        });
       }
-      lines.push('\nRemember: a premise is a numbered claim that supports the conclusion. ' +
+      lines.push('\nA premise is a numbered claim that supports the conclusion. ' +
                  'The conclusion itself ("Plant-based diets have significant health benefits") is NOT a premise.');
       this._showReveal('Not quite — try again.', lines.join('\n'), null, true);
     }
@@ -441,12 +446,12 @@ class L3Scene extends Phaser.Scene {
       announce('Correct — SOUND. Moving to question 4.', true);
       this._showReveal(
         'SOUND — correct.',
-        'SOUND — the premises align with established nutritional science (the article links to studies), ' +
-        'and the reasoning is valid. Note: an argument can be VALID but UNSOUND if a premise is false. ' +
-        'Here, the premises are well-supported, so it\'s also sound.\n\n' +
-        'Critical note: if a pod challenged P1–P3 (e.g. "what counts as plant-based?", "are these effects ' +
-        'causal or correlational?"), they could argue UNSOUND. Critical engagement with premises is good ' +
-        'philosophy. For the test, accept SOUND as the textbook answer.',
+        'SOUND means: VALID + true premises. The premises here align with established nutritional ' +
+        'science (the article cites peer-reviewed studies), and the reasoning is valid — so the argument ' +
+        'is sound.\n\n' +
+        'Why this question is harder than VALID/INVALID: soundness depends on the WORLD, not just the ' +
+        'argument\'s shape. You have to ask "are the premises actually true?" That move — interrogating ' +
+        'whether claimed evidence holds up — is exactly what Q4 will ask you to do next.',
         () => this._advanceToQ(4)
       );
     } else {

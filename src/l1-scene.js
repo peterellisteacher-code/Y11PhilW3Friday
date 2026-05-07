@@ -378,13 +378,25 @@ class L1Scene extends Phaser.Scene {
       bodyHTML: `
         <p>A deductive argument usually needs TWO premises:</p>
         <ul style="margin: 18px 0 18px 28px; line-height: 2;">
-          <li>A <strong style="color:${COLORS.BRASS.str}">MAJOR</strong> premise — a general rule about a whole category.
-              <em style="color:${COLORS.MUTED.str};">("All humans are mortal.")</em></li>
-          <li>A <strong style="color:${COLORS.BRASS.str}">MINOR</strong> premise — a specific fact about something in that category.
-              <em style="color:${COLORS.MUTED.str};">("Socrates is a human.")</em></li>
+          <li>A <strong style="color:${COLORS.BRASS.str}">MAJOR</strong> premise — a general rule about a whole category.</li>
+          <li>A <strong style="color:${COLORS.BRASS.str}">MINOR</strong> premise — a specific fact about something in that category.</li>
         </ul>
-        <p>Together they force a conclusion.
-          <em style="color:${COLORS.MUTED.str};">("∴ Socrates is mortal.")</em></p>
+        <p>Together they force a conclusion. Like this:</p>
+        <div style="
+          background: ${COLORS.PANEL_DK.str};
+          border-left: 3px solid ${COLORS.BRASS.str};
+          padding: 18px 24px;
+          margin: 18px 0;
+          font-family: ${FONTS.BODY};
+          line-height: 1.8;
+        ">
+          <div><strong style="color:${COLORS.BRASS.str}">P1 (MAJOR):</strong> All humans are mortal.</div>
+          <div><strong style="color:${COLORS.BRASS.str}">P2 (MINOR):</strong> Socrates is a human.</div>
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${COLORS.MUTED.str};">
+            <strong style="color:${COLORS.BRASS.str}">∴ C:</strong> Socrates is mortal.
+          </div>
+        </div>
+        <p>The major sets the category. The minor places Socrates inside it. The conclusion has nowhere else to go.</p>
       `,
       btnLabel: 'NEXT →',
       onNext: () => this._transitionTo('briefing-a-3'),
@@ -402,7 +414,24 @@ class L1Scene extends Phaser.Scene {
       bodyHTML: `
         <p>If the premises are true and the structure holds, the conclusion CAN'T be false.
         That's what makes a deductive argument <strong style="color:${COLORS.BRASS.str}">VALID</strong>.</p>
-        <p style="margin-top:18px;">Validity isn't about whether the premises are true — it's about whether the conclusion <em>follows</em>.</p>
+        <p style="margin-top:18px;">But validity is NOT the same as truth. Look at this:</p>
+        <div style="
+          background: ${COLORS.PANEL_DK.str};
+          border-left: 3px solid ${COLORS.L1_ACCENT.str};
+          padding: 18px 24px;
+          margin: 18px 0;
+          font-family: ${FONTS.BODY};
+          line-height: 1.8;
+        ">
+          <div><strong style="color:${COLORS.L1_ACCENT.str}">P1 (MAJOR):</strong> All cats are reptiles.</div>
+          <div><strong style="color:${COLORS.L1_ACCENT.str}">P2 (MINOR):</strong> Garfield is a cat.</div>
+          <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${COLORS.MUTED.str};">
+            <strong style="color:${COLORS.L1_ACCENT.str}">∴ C:</strong> Garfield is a reptile.
+          </div>
+        </div>
+        <p>The major premise is <em>false</em> — cats aren't reptiles. But the structure is VALID:
+        <em>if</em> cats were reptiles, Garfield would be one too. Validity is about whether the conclusion FOLLOWS,
+        not whether the premises happen to be true.</p>
         <p style="margin-top:18px;">Your job in Case A: build a valid argument from the cards provided.
         Either side can win. Just make sure the conclusion follows.</p>
       `,
