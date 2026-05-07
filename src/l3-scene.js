@@ -173,8 +173,9 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Which of these statements are PREMISES of the argument?  (Tick all that apply)', {
         fontFamily: FONTS.BODY,
-        fontSize: '21px',
+        fontSize: '28px',
         color: COLORS.PARCH.str,
+        wordWrap: { width: GAME_DIM.W - 240 },
         align: 'center',
       }).setOrigin(0.5);
     this._qAreaDoms.push({ destroy: () => prompt.destroy() });
@@ -316,7 +317,7 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Is this argument VALID or INVALID?', {
         fontFamily: FONTS.BODY,
-        fontSize: '21px',
+        fontSize: '28px',
         color: COLORS.PARCH.str,
         align: 'center',
       }).setOrigin(0.5);
@@ -393,7 +394,7 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Is this argument SOUND or UNSOUND?', {
         fontFamily: FONTS.BODY,
-        fontSize: '21px',
+        fontSize: '28px',
         color: COLORS.PARCH.str,
         align: 'center',
       }).setOrigin(0.5);
@@ -472,10 +473,10 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Which of these would be GOOD Socratic challenges to this article?  (Tick all that apply)', {
         fontFamily: FONTS.BODY,
-        fontSize: '21px',
+        fontSize: '28px',
         color: COLORS.PARCH.str,
         align: 'center',
-        wordWrap: { width: 1060 },
+        wordWrap: { width: GAME_DIM.W - 240 },
       }).setOrigin(0.5);
     this._qAreaDoms.push({ destroy: () => prompt.destroy() });
 

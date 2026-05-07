@@ -130,12 +130,17 @@ class L2Scene extends Phaser.Scene {
     this._divider = this.add.graphics();
     this._cText   = this.add.text(GAME_DIM.W / 2, 370, '', { ...lineStyle }).setOrigin(0.5);
 
-    // Verdict label (e.g. "VALID / INVALID?") - updated per Q
+    // Per-question task instruction (e.g. "Is this argument VALID or INVALID?",
+    // or for Q3: the long INVALID-find-counter-example sentence). This is the
+    // single most important line on screen during a question — sized and
+    // coloured to draw the eye, with wordWrap for long Q3 prompts.
     this._promptText = this.add.text(GAME_DIM.W / 2, 440, '', {
       fontFamily: FONTS.HERO,
-      fontSize: '22px',
-      color: COLORS.STEEL.str,
+      fontSize: '28px',
+      color: COLORS.PARCH.str,
       letterSpacing: 2,
+      wordWrap: { width: GAME_DIM.W - 240 },
+      align: 'center',
     }).setOrigin(0.5);
 
     this._populateArgument();

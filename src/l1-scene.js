@@ -438,23 +438,29 @@ class L1Scene extends Phaser.Scene {
   _exitCaseA() {}
 
   _drawCaseHeader(title, subtitle) {
+    // Header box grew from 100→130px to accommodate the larger subtitle —
+    // Peter's classroom feedback: at 18px the instruction reads as a footnote,
+    // not as the actual task. Bumping to 26px makes the "what are you doing?"
+    // line dominate the header alongside the title.
     const g = this._track(this.add.graphics());
     g.fillStyle(COLORS.PANEL_DK.num, 0.85);
-    g.fillRoundedRect(80, 90, GAME_DIM.W - 160, 100, 6);
+    g.fillRoundedRect(80, 90, GAME_DIM.W - 160, 130, 6);
     g.lineStyle(2, COLORS.L1_ACCENT.num, 0.7);
-    g.strokeRoundedRect(80, 90, GAME_DIM.W - 160, 100, 6);
+    g.strokeRoundedRect(80, 90, GAME_DIM.W - 160, 130, 6);
 
-    this._track(this.add.text(GAME_DIM.W / 2, 120, title, {
+    this._track(this.add.text(GAME_DIM.W / 2, 124, title, {
       fontFamily: FONTS.HERO,
-      fontSize: '28px',
+      fontSize: '32px',
       color: COLORS.L1_ACCENT.str,
       letterSpacing: 3,
     }).setOrigin(0.5));
 
-    this._track(this.add.text(GAME_DIM.W / 2, 162, subtitle, {
+    this._track(this.add.text(GAME_DIM.W / 2, 178, subtitle, {
       fontFamily: FONTS.BODY,
-      fontSize: '18px',
+      fontSize: '26px',
       color: COLORS.PARCH.str,
+      wordWrap: { width: GAME_DIM.W - 200 },
+      align: 'center',
     }).setOrigin(0.5));
   }
 
