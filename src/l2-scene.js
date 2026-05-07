@@ -147,17 +147,23 @@ class L2Scene extends Phaser.Scene {
   }
 
   _populateArgument() {
+    // Q1 and Q2 are now a form-isomorphic minimally-different pair: SAME terms
+    // (dog / mammal / Rex), SAME P1 ("Every dog is a mammal"). The ONLY thing
+    // that changes between Q1 and Q2 is the direction of P2 — "Rex is a dog"
+    // (forces VALID, Barbara) vs "Rex is a mammal" (forces INVALID,
+    // affirming-the-consequent). The student can isolate exactly which
+    // logical move flips the verdict.
     const args = [
       {
-        p1: 'P1: Every dog is a banana',
-        p2: 'P2: I have a dog',
-        c:  'C:  My dog is a banana',
+        p1: 'P1: Every dog is a mammal',
+        p2: 'P2: Rex is a dog',
+        c:  '∴ C:  Rex is a mammal',
         prompt: 'Is this argument VALID or INVALID?',
       },
       {
         p1: 'P1: Every dog is a mammal',
-        p2: 'P2: I have a mammal',
-        c:  'C:  My mammal is a dog',
+        p2: 'P2: Rex is a mammal',
+        c:  '∴ C:  Rex is a dog',
         prompt: 'Is this argument VALID or INVALID?',
       },
       {
@@ -170,7 +176,7 @@ class L2Scene extends Phaser.Scene {
         p1: 'P1: Every time I eat peanuts, I get a headache.',
         p2: 'P2: I ate peanuts an hour ago.',
         c:  '∴ C: Therefore, I will probably get a headache soon.',
-        prompt: 'This is an INDUCTIVE argument (the conclusion is probable, not certain). Judge its STRENGTH.',
+        prompt: 'This is an INDUCTIVE argument. Which of these would make it STRONGER? (Tick all that apply)',
       },
     ];
     const a = args[this._q];
@@ -272,16 +278,18 @@ class L2Scene extends Phaser.Scene {
     });
 
     const reveals = [
-      "The conclusion logically follows from the premises: it is impossible for it to be false if the premises are true. Validity is about the logical relationship — even if the premises are absurd, the form is valid. (This argument is NOT sound, because P1 is false — but soundness and validity are different.)",
-      "The conclusion can be false even though the premises are true. Plenty of mammals are not dogs (cats, cows, whales). 'Every dog is a mammal' does not mean 'every mammal is a dog' — that's a logical reversal.",
+      // Q1 (VALID) — Barbara: every dog is mammal + Rex is dog → Rex is mammal
+      "VALID — Rex IS a dog (P2). Every dog IS in the mammal category (P1). So Rex MUST be in the mammal category too. The conclusion has nowhere else to go.\n\nNotice: only ONE word changed between Q1 and Q2 — 'Rex is a dog' became 'Rex is a mammal'. That single change flipped a valid argument into an invalid one. That's why FORM matters, not just content.",
+      // Q2 (INVALID) — affirming the consequent: dog→mammal + Rex is mammal ≠ Rex is dog
+      "INVALID — Rex being a mammal doesn't make Rex a dog. Plenty of mammals are NOT dogs (cats, whales, you). The argument REVERSES the rule from P1: 'every dog is a mammal' is NOT the same as 'every mammal is a dog'.\n\nThis is the same shape as 'every croissant is bread / I'm holding bread / ∴ I'm holding a croissant' — clearly wrong. P1 only points one way.",
     ];
 
     // Diagnostic wrong-answer feedback per question
     const wrongFeedback = [
-      // Q1: chose INVALID for dog/banana
-      "Re-check — VALIDITY is about logical FORM, not whether the premises are TRUE. Even though 'every dog is a banana' is false, IF it were true, the conclusion would have to follow. That's the definition of valid. (Soundness — which checks if premises are also true — is a different question.)",
-      // Q2: chose VALID for dog/mammal-reversed
-      "Re-check — find a counterexample. 'Every dog is a mammal' does NOT mean 'every mammal is a dog'. Plenty of mammals (cats, cows, whales) are not dogs. So even with true premises, the conclusion can be false. That makes it INVALID.",
+      // Q1: chose INVALID for the valid Barbara syllogism
+      "Re-check — Rex IS a dog (P2). Every dog IS a mammal (P1). So Rex MUST be a mammal. The argument is VALID.\n\nValidity isn't about whether the premises happen to be true in the world — it's about whether the conclusion FOLLOWS from them. Here, it does.",
+      // Q2: chose VALID for the affirming-the-consequent
+      "Re-check — find a counter-example. Rex is a mammal (P2) — but lots of mammals aren't dogs. P1 says 'every dog is a mammal', not 'every mammal is a dog'. The argument reverses the direction of P1.\n\nCompare to Q1: only P2 changed (Rex is a dog → Rex is a mammal), and the verdict flipped. That's the lesson — FORM matters.",
     ];
 
     const revealText = correct ? reveals[this._q] : wrongFeedback[this._q];
@@ -853,58 +861,164 @@ class L2Scene extends Phaser.Scene {
     }
   }
 
-  // ── Q4: STRENGTH BUTTONS ─────────────────────────────────────────────────────
+  // ── Q4: MULTI-SELECT STRENGTH CRITERIA ──────────────────────────────────────
+  // Replaces the previous single-button STRONG/WEAK verdict (which was
+  // ceiling-capped — students could pass without thinking about WHY an
+  // inductive argument is strong). The multi-select probes the actual
+  // criteria — sample size, causal evidence, alternative-cause sensitivity,
+  // relevance — and traps reveal real misconceptions.
 
   _buildStrengthButtons() {
-    this._verdictDoms = [];
+    this._strengthOptions = [
+      {
+        text: "I've eaten peanuts 200 times, not just sometimes.",
+        correct: true,
+        why: "Bigger sample size makes inductive evidence more reliable. One headache could be a coincidence; 200 is a pattern.",
+      },
+      {
+        text: "A doctor confirmed the headaches were peanut-caused.",
+        correct: true,
+        why: "Independent expert verification of the causal link strengthens the argument — it rules out coincidence and self-misdiagnosis.",
+      },
+      {
+        text: "I usually have headaches anyway.",
+        correct: false,
+        why: "This is an ALTERNATIVE-CAUSE objection — it would WEAKEN the argument, not strengthen it. If headaches happen with or without peanuts, the peanut-link is suspect.",
+      },
+      {
+        text: "I really like peanuts.",
+        correct: false,
+        why: "Liking peanuts is irrelevant to whether they cause headaches. Personal preference doesn't strengthen evidence about causation.",
+      },
+    ];
 
-    const accent = COLORS.L2_ACCENT.str;
-    const steel  = COLORS.STEEL.str;
+    this._strengthDoms = [];
+    this._strengthChecks = [];
 
-    // STRONG button (left)
-    const sDom = this._addDomButton(
-      260, 520, 580, 100,
-      'STRONG',
-      'Click to judge this inductive argument as STRONG.',
-      accent,
-      () => this._handleStrength('STRONG'),
-      46
-    );
-    this._verdictDoms.push(sDom);
+    // Heading above the checklist
+    const heading = this.add.text(GAME_DIM.W / 2, 510,
+      'Tick every option that would make this argument stronger:', {
+        fontFamily: FONTS.BODY,
+        ...TYPE.BODY,
+        color: COLORS.MUTED.str,
+        align: 'center',
+      }).setOrigin(0.5);
+    this._strengthDoms.push({ destroy: () => heading.destroy() });
 
-    // WEAK button (right)
-    const wDom = this._addDomButton(
-      1080, 520, 580, 100,
-      'WEAK',
-      'Click to judge this inductive argument as WEAK.',
-      steel,
-      () => this._handleStrength('WEAK'),
-      46
-    );
-    this._verdictDoms.push(wDom);
-  }
+    const listEl = document.createElement('div');
+    listEl.setAttribute('role', 'group');
+    listEl.setAttribute('aria-label', 'Select all options that would strengthen the argument');
+    listEl.style.cssText = `
+      display: flex; flex-direction: column; gap: 14px;
+      width: 1100px;
+    `;
 
-  _handleStrength(choice) {
-    const correct = choice === 'STRONG';
-    this._answers[this._q] = correct;
+    this._strengthOptions.forEach((opt, i) => {
+      const label = document.createElement('label');
+      label.style.cssText = `
+        display: flex; align-items: flex-start; gap: 14px;
+        font-family: ${FONTS.BODY};
+        font-size: 22px;
+        color: ${COLORS.PARCH.str};
+        cursor: pointer;
+        line-height: 1.45;
+        padding: 14px 18px;
+        border: 1px solid ${COLORS.MUTED.str};
+        border-radius: 10px;
+        background: rgba(14,14,26,0.6);
+        transition: border-color 0.15s;
+      `;
+      const chk = document.createElement('input');
+      chk.type = 'checkbox';
+      chk.id = `q4_opt_${i}`;
+      chk.style.cssText = `
+        width: 24px; height: 24px; flex-shrink: 0; margin-top: 2px;
+        accent-color: ${COLORS.L2_ACCENT.str};
+        cursor: pointer;
+      `;
+      chk.addEventListener('change', () => {
+        label.style.borderColor = chk.checked ? COLORS.L2_ACCENT.str : COLORS.MUTED.str;
+      });
+      const span = document.createElement('span');
+      span.textContent = opt.text;
 
-    // Disable strength buttons
-    this._verdictDoms.forEach(d => {
-      const el = d.node;
-      el.disabled = true;
-      el.style.opacity = '0.4';
-      el.style.cursor  = 'default';
+      label.htmlFor = chk.id;
+      label.appendChild(chk);
+      label.appendChild(span);
+      listEl.appendChild(label);
+      this._strengthChecks.push({ el: chk, correct: opt.correct, text: opt.text, why: opt.why });
     });
 
-    const correctReveal =
-      "STRONG — the evidence is sufficient (repeated personal observation), relevant (peanuts → headaches each time), and free of obvious fallacies. A pattern observed reliably in your own experience is good inductive evidence. (Note: STRONGER if you'd ruled out other variables — e.g. it wasn't the dust on the peanuts, the time of day, etc. But this is a reasonable everyday inductive argument.)";
+    const listDom = this.add.dom(GAME_DIM.W / 2, 700, listEl);
+    this.domNodes.push(listDom);
+    this._strengthDoms.push(listDom);
 
-    const wrongReveal =
-      "Re-read slide 27 — strength is about evidence quality. Personal repeated observation IS evidence. The argument would only be WEAK if the premises were unrelated (e.g. 'I ate peanuts; therefore the moon is cheese') or based on a single anecdote. Here we have a pattern.";
+    // SUBMIT button — y=820 leaves clearance for the reveal panel that
+    // appears at y=620+ after submission AND for the COLLECT VERDICT button
+    // at y=920 that follows.
+    const submitDom = this._addDomButton(
+      GAME_DIM.W / 2 - 200, 825, 400, 60,
+      'SUBMIT',
+      'Submit your selections.',
+      COLORS.L2_ACCENT.str,
+      () => this._handleStrength(),
+      24
+    );
+    this._strengthDoms.push(submitDom);
+    this._strengthSubmitDom = submitDom;
 
-    const revealText  = correct ? correctReveal : wrongReveal;
+    // _verdictDoms used elsewhere for cleanup — alias it
+    this._verdictDoms = this._strengthDoms;
+  }
+
+  _handleStrength() {
+    const checks = this._strengthChecks;
+    const allCorrect = checks.every(c => c.el.checked === c.correct);
+    this._answers[this._q] = allCorrect;
+
+    // Disable inputs and remove the SUBMIT button (the COLLECT VERDICT
+    // button replaces it after the reveal renders).
+    checks.forEach(c => { c.el.disabled = true; });
+    if (this._strengthSubmitDom) {
+      try { this._strengthSubmitDom.destroy(); } catch {}
+      this._strengthSubmitDom = null;
+    }
+
+    // Build reveal text from per-option `why`
+    const wrongTicked = checks.filter(c => c.el.checked && !c.correct);
+    const missedCorrect = checks.filter(c => !c.el.checked && c.correct);
+
+    let revealText = '';
+    if (allCorrect) {
+      revealText = "Right. Inductive arguments are STRONG when the evidence is sufficient (sample size), relevant (the cause-link holds), and free of alternative-cause objections.\n\n";
+      revealText += "✓ More peanut-eating events → bigger sample, more reliable pattern.\n";
+      revealText += "✓ Doctor's confirmation rules out coincidence and self-misdiagnosis.\n";
+      revealText += "✗ 'I usually have headaches anyway' would WEAKEN the argument — alternative cause.\n";
+      revealText += "✗ 'I like peanuts' is irrelevant — preference ≠ causation.";
+    } else {
+      const lines = [];
+      if (wrongTicked.length) {
+        lines.push("These options DON'T strengthen the argument:");
+        wrongTicked.forEach(c => {
+          lines.push(`  ✗ "${c.text}"`);
+          lines.push(`     ${c.why}`);
+        });
+      }
+      if (missedCorrect.length) {
+        if (wrongTicked.length) lines.push('');
+        lines.push("You missed " + missedCorrect.length + " option" +
+          (missedCorrect.length > 1 ? 's' : '') + " that DO strengthen it:");
+        missedCorrect.forEach(c => {
+          lines.push(`  ✓ "${c.text}"`);
+          lines.push(`     ${c.why}`);
+        });
+      }
+      revealText = lines.join('\n');
+    }
+
+    const correct = allCorrect;
     const resultColor = correct ? COLORS.BRASS.str : COLORS.L2_ACCENT.str;
-    const resultLabel = correct ? '✔ CORRECT — STRONG' : '✗ INCORRECT';
+    const resultLabel = correct ? '✔ CORRECT — strength criteria identified' : '✗ NOT QUITE — see breakdown';
 
     // Reveal panel
     const panelG = this.add.graphics();
@@ -1074,11 +1188,8 @@ class L2Scene extends Phaser.Scene {
         return;
       }
 
-      // Q4 keyboard shortcuts
-      if (this._q === 3) {
-        if (k === 's' || k === 'S') this._handleStrength('STRONG');
-        else if (k === 'w' || k === 'W') this._handleStrength('WEAK');
-      }
+      // Q4 is now multi-select with native DOM checkboxes — the browser
+      // handles space/enter on focused checkboxes. No scene-level shortcut.
     };
     this.input.keyboard.on('keydown', this._keyHandler);
   }

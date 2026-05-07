@@ -787,20 +787,60 @@ class L1Scene extends Phaser.Scene {
 
   _showCaseADiagnostic(message) {
     this._clearCaseAFeedback();
+
+    // Render the student's attempted argument in compact standard form on
+    // the LEFT half of the banner, with the diagnostic on the RIGHT. Showing
+    // the failed structure visibly — not just the prose explanation — is
+    // what lifts this from "wrong, try again" to a near-miss worked example.
+    const m = this._slotsA.major, n = this._slotsA.minor, c = this._slotsA.conclusion;
+    const mCard = CASE_A_CARDS.find(card => card.id === m);
+    const nCard = CASE_A_CARDS.find(card => card.id === n);
+    const cCard = CASE_A_CARDS.find(card => card.id === c);
+
     const bg = this._track(this.add.graphics());
     bg.fillStyle(0x3A0A0A, 0.9);
     bg.lineStyle(2, COLORS.L1_ACCENT.num, 0.8);
-    bg.fillRoundedRect(80, 810, GAME_DIM.W - 160, 120, 6);
-    bg.strokeRoundedRect(80, 810, GAME_DIM.W - 160, 120, 6);
+    bg.fillRoundedRect(80, 750, GAME_DIM.W - 160, 220, 6);
+    bg.strokeRoundedRect(80, 750, GAME_DIM.W - 160, 220, 6);
 
-    const txt = this._track(this.add.text(GAME_DIM.W / 2, 870, message, {
+    // LEFT: standard-form rendering of the student's attempt
+    const sfX = 110, sfY = 778, sfWidth = 880;
+    const sfHeader = this._track(this.add.text(sfX, sfY, 'YOUR ATTEMPT:', {
+      fontFamily: FONTS.HERO, ...TYPE.SMALL,
+      color: COLORS.BRASS.str, letterSpacing: 3,
+    }));
+
+    const truncate = (s, max) => s && s.length > max ? s.slice(0, max - 1) + '…' : (s || '');
+    const sfP1 = this._track(this.add.text(sfX, sfY + 30,
+      `P1 (MAJOR): ${truncate(mCard?.text, 78)}`, {
+        fontFamily: FONTS.BODY, ...TYPE.BODY,
+        color: COLORS.PARCH.str, wordWrap: { width: sfWidth },
+      }));
+    const sfP2 = this._track(this.add.text(sfX, sfY + 80,
+      `P2 (MINOR): ${truncate(nCard?.text, 78)}`, {
+        fontFamily: FONTS.BODY, ...TYPE.BODY,
+        color: COLORS.PARCH.str, wordWrap: { width: sfWidth },
+      }));
+    const sfC = this._track(this.add.text(sfX, sfY + 130,
+      `∴ C: ${truncate(cCard?.text, 78)}`, {
+        fontFamily: FONTS.BODY, ...TYPE.BODY,
+        color: '#FFB680', wordWrap: { width: sfWidth },
+      }));
+
+    // Vertical divider
+    const div = this._track(this.add.graphics());
+    div.lineStyle(1, COLORS.L1_ACCENT.num, 0.5);
+    div.lineBetween(1010, 770, 1010, 950);
+
+    // RIGHT: diagnostic message — moved into right column
+    const diagX = 1030, diagWidth = GAME_DIM.W - 1030 - 30;
+    const txt = this._track(this.add.text(diagX, sfY, message, {
       fontFamily: FONTS.BODY,
-      ...TYPE.LARGE,
+      ...TYPE.BODY,
       color: '#FFB680',
-      wordWrap: { width: GAME_DIM.W - 200 },
-      align: 'center',
+      wordWrap: { width: diagWidth },
       lineSpacing: 4,
-    }).setOrigin(0.5));
+    }));
 
     this._caseAFeedbackText = txt;
     announce(message, true);
@@ -1483,6 +1523,7 @@ class L1Scene extends Phaser.Scene {
     const data = CASE_C_DATA;
     this._caseCSlots = { 'P1': null, 'P2': null, '∴ C': null };
     this._selectedCardIdC = null;
+    this._caseCAttempts = 0;  // gives the give-up reveal a counter (Fix D)
 
     // Prose + hint
     const proseX = 160, proseY = 95, proseW = GAME_DIM.W - 320, proseH = 160;
@@ -1743,10 +1784,22 @@ class L1Scene extends Phaser.Scene {
   }
 
   _showCaseCWrong(data, wrongSlots) {
+    this._caseCAttempts = (this._caseCAttempts || 0) + 1;
+
+    // After 3 wrong submissions, surface the answer instead of letting the
+    // student loop forever. Pedagogically: failure resolves into seeing the
+    // worked example, not into infinite retry. (Rosenshine 80% success.)
+    if (this._caseCAttempts >= 3) {
+      this._showCaseCGiveUp(data);
+      return;
+    }
+
     const diagnostics = wrongSlots.map(label => this._diagnoseCaseCSlot(data, label));
+    const remaining = 3 - this._caseCAttempts;
     announce(
       `Not quite. ${wrongSlots.length} slot${wrongSlots.length > 1 ? 's' : ''} wrong: ` +
-      `${wrongSlots.join(', ')}. ${diagnostics[0].hint} Try again.`,
+      `${wrongSlots.join(', ')}. ${diagnostics[0].hint} ` +
+      `${remaining} attempt${remaining > 1 ? 's' : ''} left before the answer is revealed.`,
       true
     );
 
@@ -1787,6 +1840,81 @@ class L1Scene extends Phaser.Scene {
       }));
       this.time.delayedCall(6000, () => { try { hint.destroy(); } catch {} });
     });
+  }
+
+  /**
+   * Triggered after 3 wrong submissions in Case C. Auto-fills the slots with
+   * the correct cards, marks the unstated one explicitly, and advances to the
+   * follow-up question. Replaces infinite-retry with a graceful resolution
+   * that still teaches the move (worked-example fading at the failure floor).
+   */
+  _showCaseCGiveUp(data) {
+    announce(
+      'Three attempts used. The correct answer is being revealed. ' +
+      'Read the standard-form rebuild carefully — this is the move you\'ll ' +
+      'need on the test.', true
+    );
+
+    // Auto-fill slots with the correct cards. CASE_C_DATA.answers stores
+    // the answer TEXT (not an id), so we look up the card by text match.
+    Object.entries(data.answers).forEach(([label, answerText]) => {
+      const card = data.cards.find(c => c.text === answerText);
+      if (!card) return;
+      this._caseCSlots[label] = card.id;
+      const slot = this._slotRectsC[label];
+      if (slot) {
+        slot.gfx.clear();
+        slot.gfx.fillStyle(COLORS.PANEL_DK.num, 0.95);
+        slot.gfx.lineStyle(2, COLORS.BRASS.num, 0.9);
+        slot.gfx.fillRoundedRect(slot.x, slot.y, slot.w, slot.h, 6);
+        slot.gfx.strokeRoundedRect(slot.x, slot.y, slot.w, slot.h, 6);
+        if (slot.textObj) slot.textObj.setText(card.text);
+      }
+    });
+
+    // Modal panel explaining the give-up + flagging the unstated card
+    const pw = 1100, ph = 360;
+    const px = (GAME_DIM.W - pw) / 2;
+    const py = (GAME_DIM.H - ph) / 2 - 40;
+
+    const g = this._track(this.add.graphics());
+    g.fillStyle(COLORS.PANEL_DK.num, 0.97);
+    g.lineStyle(3, COLORS.BRASS.num);
+    g.fillRoundedRect(px, py, pw, ph, 10);
+    g.strokeRoundedRect(px, py, pw, ph, 10);
+
+    this._track(this.add.text(GAME_DIM.W / 2, py + 40, 'ANSWER REVEALED', {
+      fontFamily: FONTS.HERO, ...TYPE.LARGE,
+      color: COLORS.BRASS.str, letterSpacing: 5,
+    }).setOrigin(0.5));
+
+    // The unstated premise is the one with `unstated: true` in the cards array.
+    const unstatedCard = data.cards.find(c => c.unstated);
+    const unstatedText = unstatedCard ? unstatedCard.text : '';
+
+    const explainText =
+      `The slots are now filled with the correct cards.\n\n` +
+      `The UNSTATED premise — the one that wasn't in the original prose but is needed ` +
+      `for the argument to work — is "${unstatedText.slice(0, 90)}${unstatedText.length > 90 ? '…' : ''}"\n\n` +
+      `This is the move you'll need on the Standard Form Test: surface the moral or evaluative ` +
+      `premise the writer assumes you'll fill in.`;
+
+    this._track(this.add.text(GAME_DIM.W / 2, py + 90, explainText, {
+      fontFamily: FONTS.BODY, ...TYPE.BODY,
+      color: COLORS.PARCH.str, wordWrap: { width: pw - 60 },
+      align: 'center', lineSpacing: 4,
+    }).setOrigin(0.5, 0));
+
+    // Continue button
+    const continueBtn = this._addDomButton(
+      GAME_DIM.W / 2 - 200, py + ph - 90, 400, 60,
+      'CONTINUE →',
+      'Proceed to the follow-up question.',
+      COLORS.BRASS.str,
+      () => this._askCaseCUnstatedFollowUp(data),
+      24
+    );
+    this._track({ destroy: () => { try { continueBtn.destroy(); } catch {} } });
   }
 
   _diagnoseCaseCSlot(data, label) {

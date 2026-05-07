@@ -267,6 +267,13 @@ class L3Scene extends Phaser.Scene {
 
     if (allCorrect) {
       this._q1Answered = true;
+      // Capture the student's selected premises so Q2 can show THEIR picks
+      // arranged in standard form, not a hardcoded rebuild handed to them.
+      // Pedagogically: the move "you identified these premises — now judge
+      // the structure they form" is closer to the Folio Task 2 process.
+      this._q1StudentPremises = checks
+        .filter(c => c.el.checked && c.correct)
+        .map(c => c.text);
       announce('Correct! All three premises identified.', true);
       this._showReveal(
         'CORRECT — 3 premises identified.',
@@ -328,13 +335,33 @@ class L3Scene extends Phaser.Scene {
       }).setOrigin(0.5);
     this._qAreaDoms.push({ destroy: () => prompt.destroy() });
 
-    // Standard-form rebuild panel
+    // Standard-form rebuild panel — built from the student's OWN Q1 picks
+    // when available (the cheap version of "make construction visible").
+    // Falls back to canonical premises if Q1 wasn't completed (e.g. dev jump).
+    const studentPicks = this._q1StudentPremises || [
+      'A plant-based diet is associated with a lower risk of chronic diseases.',
+      'A plant-based diet is associated with improved heart health.',
+      'A plant-based diet is associated with better weight management.',
+    ];
     const rebuildLines = [
-      'P1: A plant-based diet is associated with a lower risk of chronic diseases.',
-      'P2: A plant-based diet is associated with improved heart health.',
-      'P3: A plant-based diet is associated with better weight management.',
+      `P1: ${studentPicks[0] || ''}`,
+      `P2: ${studentPicks[1] || ''}`,
+      `P3: ${studentPicks[2] || ''}`,
       '∴ C:  Plant-based diets have significant health benefits.',
     ];
+
+    // Lead-in text that frames the rebuild as the student's own work
+    if (this._q1StudentPremises) {
+      const leadIn = this.add.text(GAME_DIM.W / 2, qY + 32,
+        'These are YOUR three premises from Q1, arranged in standard form. Now judge the structure.', {
+          fontFamily: FONTS.BODY,
+          ...TYPE.SMALL,
+          color: COLORS.BRASS.str,
+          align: 'center',
+          wordWrap: { width: 1100 },
+        }).setOrigin(0.5);
+      this._qAreaDoms.push({ destroy: () => leadIn.destroy() });
+    }
     const panelX = GAME_DIM.W / 2 - 500;
     const panelY = qY + 50;
     const g = this.add.graphics();
