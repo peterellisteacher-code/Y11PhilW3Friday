@@ -479,7 +479,7 @@ class L1Scene extends Phaser.Scene {
 
       this._track(this.add.text(def.x + slotW / 2, y + 20, def.label, {
         fontFamily: FONTS.HERO,
-        fontSize: '15px',
+        fontSize: '17px',
         color: COLORS.L1_ACCENT.str,
         letterSpacing: 3,
       }).setOrigin(0.5, 0));
@@ -761,12 +761,12 @@ class L1Scene extends Phaser.Scene {
     const bg = this._track(this.add.graphics());
     bg.fillStyle(0x3A0A0A, 0.9);
     bg.lineStyle(2, COLORS.L1_ACCENT.num, 0.8);
-    bg.fillRoundedRect(80, 810, GAME_DIM.W - 160, 90, 6);
-    bg.strokeRoundedRect(80, 810, GAME_DIM.W - 160, 90, 6);
+    bg.fillRoundedRect(80, 810, GAME_DIM.W - 160, 120, 6);
+    bg.strokeRoundedRect(80, 810, GAME_DIM.W - 160, 120, 6);
 
-    const txt = this._track(this.add.text(GAME_DIM.W / 2, 855, message, {
+    const txt = this._track(this.add.text(GAME_DIM.W / 2, 870, message, {
       fontFamily: FONTS.BODY,
-      fontSize: '17px',
+      ...TYPE.LARGE,
       color: '#FFB680',
       wordWrap: { width: GAME_DIM.W - 200 },
       align: 'center',
@@ -883,14 +883,14 @@ class L1Scene extends Phaser.Scene {
 
       this._track(this.add.text(x + slotW / 2, premiseY + 18, `PREMISE ${i + 1}`, {
         fontFamily: FONTS.HERO,
-        fontSize: '14px',
+        fontSize: '17px',
         color: COLORS.L1_ACCENT.str,
         letterSpacing: 3,
       }).setOrigin(0.5, 0));
 
       const contentText = this._track(this.add.text(x + slotW / 2, premiseY + slotH / 2 + 16, '', {
         fontFamily: FONTS.BODY,
-        fontSize: '16px',
+        ...TYPE.BODY,
         color: COLORS.PARCH.str,
         wordWrap: { width: slotW - 28 },
         align: 'center',
@@ -911,14 +911,14 @@ class L1Scene extends Phaser.Scene {
 
     this._track(this.add.text(cSlotX + slotW / 2, conclusionY + 18, 'CONCLUSION', {
       fontFamily: FONTS.HERO,
-      fontSize: '14px',
+      fontSize: '17px',
       color: COLORS.L1_ACCENT.str,
       letterSpacing: 3,
     }).setOrigin(0.5, 0));
 
     const cContentText = this._track(this.add.text(cSlotX + slotW / 2, conclusionY + slotH / 2 + 16, '', {
       fontFamily: FONTS.BODY,
-      fontSize: '16px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
       wordWrap: { width: slotW - 28 },
       align: 'center',
@@ -959,7 +959,7 @@ class L1Scene extends Phaser.Scene {
 
     const txt = this._track(this.add.text(cx + cardW / 2, cy + cardH / 2, card.text, {
       fontFamily: FONTS.BODY,
-      fontSize: '16px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
       wordWrap: { width: cardW - 24 },
       align: 'center',
@@ -1141,12 +1141,12 @@ class L1Scene extends Phaser.Scene {
     const bg = this._track(this.add.graphics());
     bg.fillStyle(0x3A0A0A, 0.9);
     bg.lineStyle(2, COLORS.L1_ACCENT.num, 0.8);
-    bg.fillRoundedRect(80, 940, GAME_DIM.W - 160, 90, 6);
-    bg.strokeRoundedRect(80, 940, GAME_DIM.W - 160, 90, 6);
+    bg.fillRoundedRect(80, 940, GAME_DIM.W - 160, 120, 6);
+    bg.strokeRoundedRect(80, 940, GAME_DIM.W - 160, 120, 6);
 
-    const txt = this._track(this.add.text(GAME_DIM.W / 2, 985, message, {
+    const txt = this._track(this.add.text(GAME_DIM.W / 2, 1000, message, {
       fontFamily: FONTS.BODY,
-      fontSize: '16px',
+      ...TYPE.LARGE,
       color: '#FFB680',
       wordWrap: { width: GAME_DIM.W - 200 },
       align: 'center',
@@ -1202,7 +1202,7 @@ class L1Scene extends Phaser.Scene {
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 110, sfLines.join('\n'), {
       fontFamily: FONTS.BODY,
-      fontSize: '15px',
+      ...TYPE.SMALL,
       color: COLORS.PARCH.str,
       wordWrap: { width: panelW - 80 },
       lineSpacing: 8,
@@ -1464,7 +1464,7 @@ class L1Scene extends Phaser.Scene {
     pgfx.strokeRoundedRect(proseX, proseY, proseW, proseH, 6);
 
     this._track(this.add.text(proseX + 24, proseY + 18, 'CASE C — AI Tools', {
-      fontFamily: FONTS.HERO, fontSize: '16px',
+      fontFamily: FONTS.HERO, fontSize: '17px',
       color: COLORS.L1_ACCENT.str, letterSpacing: 3,
     }));
 
@@ -1513,7 +1513,7 @@ class L1Scene extends Phaser.Scene {
       }));
 
       const contentText = this._track(this.add.text(sx + slotW / 2, y + slotH / 2 + 16, '', {
-        fontFamily: FONTS.BODY, fontSize: '20px',
+        fontFamily: FONTS.BODY, ...TYPE.BODY,
         color: COLORS.PARCH.str,
         wordWrap: { width: slotW - 32 },
         align: 'center',
@@ -1555,7 +1555,7 @@ class L1Scene extends Phaser.Scene {
     // Display only card.text — no [UNSTATED] prefix
     const txt = this._track(this.add.text(cx + cardW / 2, cy + cardH / 2, card.text, {
       fontFamily: FONTS.BODY,
-      fontSize: '20px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
       wordWrap: { width: cardW - 28 },
       align: 'center',
@@ -1753,7 +1753,7 @@ class L1Scene extends Phaser.Scene {
       this.time.delayedCall(6000, () => { try { mark.destroy(); } catch {} });
 
       const hint = this._track(this.add.text(x + 4, y + h + 4, '⚑  ' + diagnostics[i].hint, {
-        fontFamily: FONTS.BODY, fontSize: '13px',
+        fontFamily: FONTS.BODY, ...TYPE.SMALL,
         color: '#FFB680', wordWrap: { width: 460 },
       }));
       this.time.delayedCall(6000, () => { try { hint.destroy(); } catch {} });
@@ -1793,21 +1793,21 @@ class L1Scene extends Phaser.Scene {
     g.strokeRoundedRect(px, py, pw, ph, 10);
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 38, 'ONE MORE QUESTION', {
-      fontFamily: FONTS.HERO, fontSize: '20px',
+      fontFamily: FONTS.HERO, ...TYPE.LARGE,
       color: COLORS.BRASS.str, letterSpacing: 5,
     }).setOrigin(0.5));
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 86,
       'Read the original prose again. Which premise was UNSTATED — i.e. not actually written, but assumed?',
       {
-        fontFamily: FONTS.BODY, fontSize: '20px', color: COLORS.PARCH.str,
+        fontFamily: FONTS.BODY, ...TYPE.BODY, color: COLORS.PARCH.str,
         wordWrap: { width: pw - 80 }, align: 'center', lineSpacing: 6,
       }).setOrigin(0.5));
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 162,
       `"${data.prose}"`,
       {
-        fontFamily: FONTS.BODY, fontSize: '15px', color: COLORS.STEEL.str,
+        fontFamily: FONTS.BODY, ...TYPE.SMALL, color: COLORS.STEEL.str,
         fontStyle: 'italic', wordWrap: { width: pw - 100 }, align: 'center',
       }).setOrigin(0.5));
 
@@ -1850,13 +1850,13 @@ class L1Scene extends Phaser.Scene {
     }).setOrigin(0.5));
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 130, choice.why, {
-      fontFamily: FONTS.BODY, fontSize: '18px', color: COLORS.PARCH.str,
+      fontFamily: FONTS.BODY, ...TYPE.BODY, color: COLORS.PARCH.str,
       wordWrap: { width: pw - 80 }, align: 'center', lineSpacing: 6,
     }).setOrigin(0.5));
 
     if (!correct) {
       this._track(this.add.text(GAME_DIM.W / 2, py + 215, 'Have another think — the answer is one of P1, P2, or ∴ C.', {
-        fontFamily: FONTS.BODY, fontSize: '15px', color: COLORS.STEEL.str,
+        fontFamily: FONTS.BODY, ...TYPE.SMALL, color: COLORS.STEEL.str,
         fontStyle: 'italic', align: 'center',
       }).setOrigin(0.5));
 
@@ -1920,7 +1920,7 @@ class L1Scene extends Phaser.Scene {
     }).setOrigin(0.5));
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 215, 'Three arguments analysed and reconstructed.', {
-      fontFamily: FONTS.BODY, fontSize: '18px',
+      fontFamily: FONTS.BODY, ...TYPE.BODY,
       color: COLORS.PARCH.str,
     }).setOrigin(0.5));
 
@@ -2042,7 +2042,7 @@ class L1Scene extends Phaser.Scene {
   _drawKeyboardHint(msg) {
     this._track(this.add.text(GAME_DIM.W / 2, GAME_DIM.H - 28, msg, {
       fontFamily: FONTS.BODY,
-      fontSize: '14px',
+      ...TYPE.SMALL,
       color: COLORS.MUTED.str,
       letterSpacing: 1,
     }).setOrigin(0.5));

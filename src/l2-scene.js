@@ -588,7 +588,7 @@ class L2Scene extends Phaser.Scene {
       const cardTextOrigX = cardCenterX, cardTextOrigY = cardCenterY + 10;
       const cardText = this.add.text(cardTextOrigX, cardTextOrigY, card.text, {
         fontFamily: FONTS.BODY,
-        fontSize: '17px',
+        ...TYPE.BODY,
         color: COLORS.PARCH.str,
         wordWrap: { width: cardW - 32 },
         align: 'center',
@@ -681,7 +681,7 @@ class L2Scene extends Phaser.Scene {
 
     this.add.text(W / 2, 1010, 'Keyboard: 1/2/3 to select a card, then ENTER to place it', {
       fontFamily: FONTS.BODY,
-      fontSize: '15px',
+      ...TYPE.SMALL,
       color: COLORS.MUTED.str,
     }).setOrigin(0.5);
   }
@@ -763,7 +763,7 @@ class L2Scene extends Phaser.Scene {
 
     this.add.text(GAME_DIM.W / 2, 688, '✔ EXHIBIT ACCEPTED', {
       fontFamily: FONTS.HERO,
-      fontSize: '30px',
+      ...TYPE.LARGE,
       color: COLORS.BRASS.str,
       letterSpacing: 4,
     }).setOrigin(0.5);
@@ -833,7 +833,7 @@ class L2Scene extends Phaser.Scene {
     // Fix 4d: error message with its own independent 4-second timer (decoupled from tween)
     const msg = this.add.text(GAME_DIM.W / 2, 680, msgText, {
       fontFamily: FONTS.BODY,
-      fontSize: '22px',
+      ...TYPE.LARGE,
       color: COLORS.L2_ACCENT.str,
       wordWrap: { width: GAME_DIM.W - 400 },
       align: 'center',
@@ -924,7 +924,7 @@ class L2Scene extends Phaser.Scene {
 
     const revealTxt = this.add.text(GAME_DIM.W / 2, 720, revealText, {
       fontFamily: FONTS.BODY,
-      fontSize: '21px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
       wordWrap: { width: GAME_DIM.W - 380 },
       align: 'center',

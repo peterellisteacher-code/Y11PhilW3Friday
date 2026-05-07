@@ -128,7 +128,7 @@ class PodLoginScene extends Phaser.Scene {
     if (this.hintText) this.hintText.destroy();
     this.hintText = this.add.text(960, 640, msg, {
       fontFamily: FONTS.BODY,
-      fontSize: '20px',
+      ...TYPE.BODY,
       color: COLORS.STEEL.str,
     }).setOrigin(0.5);
   }
@@ -270,14 +270,14 @@ class PodLoginScene extends Phaser.Scene {
       // Label
       this.add.text(x, y + 80, opt.label, {
         fontFamily: FONTS.BODY,
-        fontSize: '20px',
+        ...TYPE.BODY,
         color: COLORS.BRASS.str,
       }).setOrigin(0.5);
 
       // Number hint
       this.add.text(x, y + 110, `[${i + 1}]`, {
         fontFamily: FONTS.BODY,
-        fontSize: '14px',
+        ...TYPE.SMALL,
         color: COLORS.STEEL.str,
       }).setOrigin(0.5);
 
@@ -290,7 +290,7 @@ class PodLoginScene extends Phaser.Scene {
 
     this.add.text(960, 680, 'Arrow keys + Enter, or click your instrument', {
       fontFamily: FONTS.BODY,
-      fontSize: '20px',
+      ...TYPE.BODY,
       color: COLORS.STEEL.str,
     }).setOrigin(0.5);
   }

@@ -127,7 +127,7 @@ class L3Scene extends Phaser.Scene {
 
     this.add.text(panelX + 24, panelY + 18, '"The Benefits of a Plant-Based Diet"  (Healthline)', {
       fontFamily: FONTS.BODY,
-      fontSize: '20px',
+      ...TYPE.BODY,
       color: COLORS.L3_ACCENT.str,
     });
 
@@ -343,7 +343,7 @@ class L3Scene extends Phaser.Scene {
       const isConclusion = i === 3;
       const t = this.add.text(panelX + 28, panelY + 22 + i * 46, line, {
         fontFamily: FONTS.BODY,
-        fontSize: '20px',
+        ...TYPE.BODY,
         color: isConclusion ? COLORS.L3_ACCENT.str : COLORS.PARCH.str,
       });
       this._qAreaDoms.push({ destroy: () => t.destroy() });
@@ -420,7 +420,7 @@ class L3Scene extends Phaser.Scene {
       const isConclusion = i === 3;
       const t = this.add.text(panelX + 28, panelY + 22 + i * 46, line, {
         fontFamily: FONTS.BODY,
-        fontSize: '20px',
+        ...TYPE.BODY,
         color: isConclusion ? COLORS.L3_ACCENT.str : COLORS.PARCH.str,
       });
       this._qAreaDoms.push({ destroy: () => t.destroy() });
@@ -483,7 +483,7 @@ class L3Scene extends Phaser.Scene {
     const subPrompt = this.add.text(GAME_DIM.W / 2, qY + 40,
       'A good Socratic challenge engages the argument\'s logic, evidence, or assumptions — not the author\'s character or your personal preferences.', {
         fontFamily: FONTS.BODY,
-        fontSize: '15px',
+        ...TYPE.SMALL,
         color: COLORS.MUTED.str,
         align: 'center',
         wordWrap: { width: 1000 },

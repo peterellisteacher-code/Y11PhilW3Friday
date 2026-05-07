@@ -199,7 +199,7 @@ class HubScene extends Phaser.Scene {
     // Subtitle
     this.add.text(cx, y + 180, lesson.subtitle, {
       fontFamily: FONTS.BODY,
-      fontSize: '15px',
+      ...TYPE.SMALL,
       color: COLORS.STEEL.str,
       wordWrap: { width: doorW - 32 },
       align: 'center',
@@ -214,7 +214,7 @@ class HubScene extends Phaser.Scene {
       }).setOrigin(0.5);
       this.add.text(cx, y + 380, 'DIGIT RECOVERED', {
         fontFamily: FONTS.BODY,
-        fontSize: '16px',
+        ...TYPE.SMALL,
         color: COLORS.BRASS.str,
         letterSpacing: 2,
       }).setOrigin(0.5);
@@ -229,7 +229,7 @@ class HubScene extends Phaser.Scene {
       }
       this.add.text(cx, y + 350, 'AWAITING ENTRY', {
         fontFamily: FONTS.BODY,
-        fontSize: '14px',
+        ...TYPE.SMALL,
         color: COLORS.STEEL.str,
         letterSpacing: 3,
       }).setOrigin(0.5);
@@ -299,7 +299,7 @@ class HubScene extends Phaser.Scene {
       }).setOrigin(0.5);
       this.add.text(1580, 950, 'Vault sealed', {
         fontFamily: FONTS.BODY,
-        fontSize: '14px',
+        ...TYPE.SMALL,
         color: COLORS.MUTED.str,
       }).setOrigin(0.5);
     }

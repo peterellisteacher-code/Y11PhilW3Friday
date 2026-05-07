@@ -33,6 +33,28 @@ const FONTS = {
   HERO: "'Archivo Black', sans-serif",
 };
 
+// ── TYPE SCALE — Classroom projection floor ─────────────────────────────────
+// All in-game text picks ONE of these four sizes. Floor: nothing under 17px.
+// Each tier names its INTENT, not its size — so when content shifts category
+// (hint → instruction; body → primary feedback) the size moves with it.
+//
+// Use as: this.add.text(x, y, str, { ...TYPE.LARGE, color: '...' })
+//
+//   HUGE   36px  Hero / vault reveal / scene-defining moments
+//   LARGE  28px  Task instructions, primary feedback (success/error panels,
+//                diagnostic banners), main action button labels
+//   BODY   22px  Card content, slot content, briefing body, dialogue
+//   SMALL  17px  Hints, keyboard cheat-sheet, attribution, secondary metadata
+//
+// Don't go below SMALL. If text needs to be smaller than 17px to fit, the
+// container is wrong, not the text.
+const TYPE = {
+  HUGE:  { fontSize: '36px' },
+  LARGE: { fontSize: '28px' },
+  BODY:  { fontSize: '22px' },
+  SMALL: { fontSize: '17px' },
+};
+
 const LESSONS = [
   { key: 'L1', scene: 'L1Scene', label: 'THE ARGUMENT LAB',  subtitle: 'Standard Form Reconstruction', accent: COLORS.L1_ACCENT },
   { key: 'L2', scene: 'L2Scene', label: 'VALIDITY COURT',     subtitle: 'Verdicts & Counter-Examples',  accent: COLORS.L2_ACCENT },

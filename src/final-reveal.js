@@ -91,7 +91,7 @@ class FinalRevealScene extends Phaser.Scene {
 
     this.add.text(GAME_DIM.W / 2, 660, 'Return here once all three are collected to open the vault.', {
       fontFamily: FONTS.BODY,
-      fontSize: '20px',
+      ...TYPE.BODY,
       color: COLORS.MUTED.str,
     }).setOrigin(0.5);
 
@@ -134,7 +134,7 @@ class FinalRevealScene extends Phaser.Scene {
 
     this.add.text(GAME_DIM.W / 2, 640, 'Each digit was earned during a lesson. Type them now.', {
       fontFamily: FONTS.BODY,
-      fontSize: '20px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
     }).setOrigin(0.5);
 
