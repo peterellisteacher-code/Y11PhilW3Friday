@@ -50,13 +50,17 @@ class HubScene extends Phaser.Scene {
       letterSpacing: 3,
     }).setOrigin(0, 0.5);
 
-    // Pod identity (right side)
-    this.add.image(1800, 40, `badge_${this.state.badge || 0}`).setScale(0.6);
-    this.add.text(1845, 40, `POD: ${this.podCode}`, {
+    // Pod identity (right side) — text right-anchored at canvas edge minus
+    // 20px gutter, badge sits immediately to its left. Original layout used
+    // left-anchored text at x=1845 with 22px Archivo Black, which overflows
+    // GAME_DIM.W (1920) by ~55px for a 4-letter pod code, clipping the label.
+    const podText = this.add.text(GAME_DIM.W - 20, 40, `POD: ${this.podCode}`, {
       fontFamily: FONTS.HERO,
       fontSize: '22px',
       color: COLORS.PARCH.str,
-    }).setOrigin(0, 0.5);
+    }).setOrigin(1, 0.5);
+    this.add.image(GAME_DIM.W - 20 - podText.width - 12, 40,
+      `badge_${this.state.badge || 0}`).setScale(0.6).setOrigin(1, 0.5);
   }
 
   // ── DOSSIER PANEL (left) ───────────────────────────────────────────────────
