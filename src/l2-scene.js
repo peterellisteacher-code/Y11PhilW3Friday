@@ -949,7 +949,10 @@ class L2Scene extends Phaser.Scene {
       this._strengthChecks.push({ el: chk, correct: opt.correct, text: opt.text, why: opt.why });
     });
 
-    const listDom = this.add.dom(GAME_DIM.W / 2, 700, listEl);
+    // List centred at y=665 (was 700) so its bottom edge clears the SUBMIT
+    // button at y=825. With 4 labels × ~62px + 3 gaps × 14px ≈ 290px tall,
+    // top ≈ y=520, bottom ≈ y=810 — 15px clear of the button.
+    const listDom = this.add.dom(GAME_DIM.W / 2, 665, listEl);
     this.domNodes.push(listDom);
     this._strengthDoms.push(listDom);
 

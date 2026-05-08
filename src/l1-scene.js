@@ -376,10 +376,10 @@ class L1Scene extends Phaser.Scene {
       titleId: 'briefing-a-title',
       title: 'Major and minor premises',
       bodyHTML: `
-        <p>A deductive argument usually needs TWO premises:</p>
+        <p>A <strong style="color:${COLORS.BRASS.str}">DEDUCTIVE</strong> argument is one where the conclusion is meant to FOLLOW NECESSARILY from the premises &mdash; not just be likely. It usually needs TWO premises:</p>
         <ul style="margin: 18px 0 18px 28px; line-height: 2;">
-          <li>A <strong style="color:${COLORS.BRASS.str}">MAJOR</strong> premise — a general rule about a whole category.</li>
-          <li>A <strong style="color:${COLORS.BRASS.str}">MINOR</strong> premise — a specific fact about something in that category.</li>
+          <li>A <strong style="color:${COLORS.BRASS.str}">MAJOR</strong> premise &mdash; a general rule about a whole category.</li>
+          <li>A <strong style="color:${COLORS.BRASS.str}">MINOR</strong> premise &mdash; a specific fact about something in that category.</li>
         </ul>
         <p>Together they force a conclusion. Like this:</p>
         <div style="
@@ -446,6 +446,10 @@ class L1Scene extends Phaser.Scene {
 
   _enterCaseA() {
     announce('Case A — Hot Dogs. Build a valid deductive argument about whether a hot dog is a sandwich.', true);
+
+    // Hide the atmospheric patient sprite during cases — at x=1700 it
+    // overlaps the right-column cards and clutters the working area.
+    if (this._patientSprite) this._patientSprite.setVisible(false);
 
     // Shuffle cards
     this._caseACards = this._shuffle([...CASE_A_CARDS]);
@@ -590,28 +594,29 @@ class L1Scene extends Phaser.Scene {
   }
 
   _drawCaseAButtons() {
-    // Submit button (disabled initially)
+    // Buttons at y=985 — below the diagnostic banner (which sits at y=750-970
+    // when shown, with two-column near-miss rendering). Earlier they were at
+    // y=740 which collided with the banner top by ~50px.
     const submitDom = this._addDomButton(
-      GAME_DIM.W - 380, 740, 300, 58,
+      GAME_DIM.W - 380, 985, 300, 60,
       'SUBMIT ARGUMENT',
       'Submit your argument for evaluation.',
       COLORS.L1_ACCENT.str,
       () => this._submitCaseA(),
-      18
+      20
     );
     this._submitBtnA = submitDom.node;
     this._submitBtnA.disabled = true;
     this._submitBtnA.style.opacity = '0.35';
     this._trackDOM({ destroy: () => submitDom.destroy() });
 
-    // Reset button
     const resetDom = this._addDomButton(
-      80, 740, 200, 58,
+      80, 985, 200, 60,
       'RESET',
       'Return all cards to the pool.',
       COLORS.MUTED.str,
       () => this._resetCaseA(),
-      18
+      20
     );
     this._trackDOM({ destroy: () => resetDom.destroy() });
   }
@@ -915,7 +920,9 @@ class L1Scene extends Phaser.Scene {
   // ── CASE B — CEREAL ───────────────────────────────────────────────────────
 
   _enterCaseB() {
-    announce('Case B — Cereal. Build a strong inductive argument for whether cereal is a soup.', true);
+    announce('Case B — Cereal. INDUCTIVE arguments don\'t force a conclusion — they make it more or less LIKELY based on evidence. Build a strong inductive argument for whether cereal is a soup.', true);
+
+    if (this._patientSprite) this._patientSprite.setVisible(false);
 
     this._caseBCards = this._shuffle([...CASE_B_CARDS]);
     // 4 premise slots + 1 conclusion slot
@@ -1045,8 +1052,11 @@ class L1Scene extends Phaser.Scene {
   }
 
   _drawCaseBButtons() {
+    // Buttons at y=1010 — below the diagnostic banner that now sits at
+    // y=920-1000. Earlier they were at y=950, colliding with the banner
+    // (y=940-1060) by 50+px.
     const submitDom = this._addDomButton(
-      GAME_DIM.W - 380, 950, 300, 58,
+      GAME_DIM.W - 380, 1010, 300, 60,
       'SUBMIT ARGUMENT',
       'Submit your inductive argument for evaluation.',
       COLORS.L1_ACCENT.str,
@@ -1059,7 +1069,7 @@ class L1Scene extends Phaser.Scene {
     this._trackDOM({ destroy: () => submitDom.destroy() });
 
     const resetDom = this._addDomButton(
-      80, 950, 200, 58,
+      80, 1010, 200, 60,
       'RESET',
       'Return all cards to the pool.',
       COLORS.MUTED.str,
@@ -1207,15 +1217,19 @@ class L1Scene extends Phaser.Scene {
 
   _showCaseBDiagnostic(message) {
     this._clearCaseBFeedback();
+    // Banner at y=920-1000 (h=80), TYPE.BODY 22px instead of LARGE 28 — fits
+    // the tight band between Case B's row-3 cards (end y=932 — banner overlaps
+    // by 12px, acceptable since cards are non-interactive at submit time) and
+    // the buttons at y=1010+.
     const bg = this._track(this.add.graphics());
     bg.fillStyle(0x3A0A0A, 0.9);
     bg.lineStyle(2, COLORS.L1_ACCENT.num, 0.8);
-    bg.fillRoundedRect(80, 940, GAME_DIM.W - 160, 120, 6);
-    bg.strokeRoundedRect(80, 940, GAME_DIM.W - 160, 120, 6);
+    bg.fillRoundedRect(80, 920, GAME_DIM.W - 160, 80, 6);
+    bg.strokeRoundedRect(80, 920, GAME_DIM.W - 160, 80, 6);
 
-    const txt = this._track(this.add.text(GAME_DIM.W / 2, 1000, message, {
+    const txt = this._track(this.add.text(GAME_DIM.W / 2, 960, message, {
       fontFamily: FONTS.BODY,
-      ...TYPE.LARGE,
+      ...TYPE.BODY,
       color: '#FFB680',
       wordWrap: { width: GAME_DIM.W - 200 },
       align: 'center',
@@ -1307,7 +1321,7 @@ class L1Scene extends Phaser.Scene {
         <div style="text-align:center; margin: 28px 0;">
           <img src="assets/images/briefing/sign_crocodile.jpg"
                alt="A 'Beware of Crocodiles' warning sign mounted on a post"
-               style="max-width: 500px; max-height: 300px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
+               style="max-width: 460px; max-height: 240px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
         </div>
 
         <p>The sign says <strong style="color:${COLORS.BRASS.str}">&#8220;Beware Crocodiles.&#8221;</strong>
@@ -1358,7 +1372,7 @@ class L1Scene extends Phaser.Scene {
       <div style="text-align:center; margin-bottom: 24px;">
         <img src="assets/images/briefing/sign_wet_floor.jpg"
              alt="A yellow A-frame 'Caution Wet Floor' sign on a tiled floor"
-             style="max-width: 500px; max-height: 300px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
+             style="max-width: 460px; max-height: 240px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
       </div>
 
       <p><strong style="color:${COLORS.BRASS.str};">&#8220;Caution &#8212; Wet Floor.&#8221;</strong>
@@ -1411,9 +1425,9 @@ class L1Scene extends Phaser.Scene {
 
     // Wire MCQ buttons
     const choices = [
-      { id: 'c3-opt-a', correct: true,  feedback: 'Right. The sign assumes the harm is shared — that smoking affects people nearby, not just the smoker. Without that premise, the prohibition doesn\'t follow.' },
-      { id: 'c3-opt-b', correct: false, feedback: 'Not quite. Cigarettes aren\'t generally illegal — the sign would be redundant if they were. Try again.' },
-      { id: 'c3-opt-c', correct: false, feedback: 'Not quite. If it were just preference, there\'d be no reason to display a sign. Try again.' },
+      { id: 'c3-opt-a', correct: true,  feedback: 'Yes — that\'s it. The sign assumes smoking harms people nearby, not just the smoker. Without that hidden premise, the ban makes no sense.' },
+      { id: 'c3-opt-b', correct: false, feedback: 'Cigarettes aren\'t generally illegal — if they were, the sign would be redundant. Try again.' },
+      { id: 'c3-opt-c', correct: false, feedback: 'If it were just preference, why bother with a sign? Try again.' },
     ];
 
     choices.forEach(choice => {
@@ -1519,6 +1533,8 @@ class L1Scene extends Phaser.Scene {
 
   _enterCaseC() {
     announce('Case C — AI Tools. Build the argument in standard form. Find the unstated premise.', true);
+
+    if (this._patientSprite) this._patientSprite.setVisible(false);
 
     const data = CASE_C_DATA;
     this._caseCSlots = { 'P1': null, 'P2': null, '∴ C': null };
@@ -1872,6 +1888,12 @@ class L1Scene extends Phaser.Scene {
       }
     });
 
+    // Scrim FIRST — dim the underlying cards/slots so the modal sits on a
+    // clean field rather than visually mixing with the play area.
+    const scrim = this._track(this.add.graphics());
+    scrim.fillStyle(0x000000, 0.7);
+    scrim.fillRect(0, 0, GAME_DIM.W, GAME_DIM.H);
+
     // Modal panel explaining the give-up + flagging the unstated card
     const pw = 1100, ph = 360;
     const px = (GAME_DIM.W - pw) / 2;
@@ -1914,7 +1936,10 @@ class L1Scene extends Phaser.Scene {
       () => this._askCaseCUnstatedFollowUp(data),
       24
     );
-    this._track({ destroy: () => { try { continueBtn.destroy(); } catch {} } });
+    // Use _trackDOM so the give-up CONTINUE button is cleaned up alongside
+    // other DOM elements on phase exit (was _track which is for Phaser
+    // GameObjects only).
+    this._trackDOM({ destroy: () => { try { continueBtn.destroy(); } catch {} } });
   }
 
   _diagnoseCaseCSlot(data, label) {
@@ -1939,6 +1964,12 @@ class L1Scene extends Phaser.Scene {
   }
 
   _askCaseCUnstatedFollowUp(data) {
+    // Scrim — dim the play area so the follow-up MCQ doesn't visually mix
+    // with cards/slots underneath.
+    const scrim = this._track(this.add.graphics());
+    scrim.fillStyle(0x000000, 0.7);
+    scrim.fillRect(0, 0, GAME_DIM.W, GAME_DIM.H);
+
     const pw = 920, ph = 380;
     const px = (GAME_DIM.W - pw) / 2;
     const py = (GAME_DIM.H - ph) / 2 - 40;

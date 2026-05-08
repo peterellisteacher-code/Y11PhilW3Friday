@@ -134,9 +134,12 @@ class HubScene extends Phaser.Scene {
       g.strokeRoundedRect(x - cardW / 2, y - cardH / 2, cardW, cardH, 4);
 
       if (i < allEvidence.length) {
+        // Bumped 11px → 14px (still under SMALL floor of 17px because the
+        // chip is only 90×120 — these are decorative micro-labels by design,
+        // documented in constants.js as one of the explicit exceptions).
         this.add.text(x, y, allEvidence[i].toUpperCase().replace(/-/g, ' '), {
           fontFamily: FONTS.BODY,
-          fontSize: '11px',
+          fontSize: '14px',
           color: COLORS.BG_INK.str,
           wordWrap: { width: cardW - 8 },
           align: 'center',
@@ -273,10 +276,10 @@ class HubScene extends Phaser.Scene {
         fontSize: '52px',
         color: digits[i] ? COLORS.BRASS.str : COLORS.MUTED.str,
       }).setOrigin(0.5);
-      // Lesson tag below dial
+      // Lesson tag bumped 12px → 17px (TYPE.SMALL floor)
       this.add.text(dx, 990, ['L1', 'L2', 'L3'][i], {
         fontFamily: FONTS.BODY,
-        fontSize: '12px',
+        ...TYPE.SMALL,
         color: digits[i] ? COLORS.PARCH.str : COLORS.MUTED.str,
         letterSpacing: 3,
       }).setOrigin(0.5);
@@ -307,7 +310,10 @@ class HubScene extends Phaser.Scene {
 
   // ── EXPORT URL BUTTON (bottom-left strip) ──────────────────────────────────
   _drawExportButton() {
-    this._addDomButton(30, 1048, 380, 30,
+    // Was at y=1048 with h=30 — orphaned 2px from canvas edge AND below the
+    // dossier panel boundary (y=1040). Moved into the panel footer at y=988
+    // with h=44 (meets 44×44 tap-target rule for primary actions).
+    this._addDomButton(50, 988, 340, 44,
       '↗ EXPORT SAVE LINK · E',
       'Copy save URL to clipboard. Press E.',
       COLORS.STEEL.str,

@@ -333,7 +333,9 @@ class FinalRevealScene extends Phaser.Scene {
     });
     wrapper.appendChild(backBtn);
 
-    const dialDom = this.add.dom(GAME_DIM.W / 2, 800, wrapper);
+    // Dial moved cy=800 → cy=870 so its top edge (~685) clears the sub-label
+    // line at y=640. Was overlapping by ~25px before.
+    const dialDom = this.add.dom(GAME_DIM.W / 2, 870, wrapper);
     this.domNodes.push(dialDom);
 
     // Keep a reference for phase 2
@@ -499,7 +501,9 @@ class FinalRevealScene extends Phaser.Scene {
 
   _buildCertificatePanel({ s, badgeDef, digits, dateStr }) {
     // Certificate occupies top-right quadrant
-    const CERT_X = 460, CERT_Y = 110, CERT_W = 860, CERT_H = 480;
+    // Cert shrunk from H=480 to H=440 so the PRINT button at CERT_Y+CERT_H+12
+    // (= y=562 now, was y=602) doesn't crash into the exemplar panel at y=614.
+    const CERT_X = 460, CERT_Y = 110, CERT_W = 860, CERT_H = 440;
 
     const certEl = document.createElement('div');
     certEl.id = 'vault-certificate';
@@ -596,7 +600,9 @@ class FinalRevealScene extends Phaser.Scene {
   }
 
   _buildExemplarPanel() {
-    const PANEL_X = 40, PANEL_Y = 620, PANEL_W = 1180, PANEL_H = 420;
+    // Panel y=620 → 624 (clears PRINT button at y=562+48 = 610). Body font
+    // bumped 15px → 18px (was below the 17px floor).
+    const PANEL_X = 40, PANEL_Y = 624, PANEL_W = 1180, PANEL_H = 400;
 
     const exEl = document.createElement('div');
     exEl.style.cssText = `
@@ -604,10 +610,10 @@ class FinalRevealScene extends Phaser.Scene {
       background: ${COLORS.PANEL.str};
       border: 1px solid ${COLORS.MUTED.str};
       border-radius: 4px;
-      padding: 28px 36px;
+      padding: 24px 32px;
       font-family: ${FONTS.BODY};
       color: ${COLORS.PARCH.str};
-      font-size: 15px;
+      font-size: 18px;
       line-height: 1.6;
       box-sizing: border-box;
     `;

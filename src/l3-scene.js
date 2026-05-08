@@ -136,11 +136,13 @@ class L3Scene extends Phaser.Scene {
       'improved heart health, and better weight management. Plant-based diets are generally higher in nutrients and lower\n' +
       'in harmful substances. Chronic diseases are linked to poor diet and lifestyle choices.';
 
+    // Article body bumped 17px → 18px (above projection-floor for body) and
+    // panel grows 178 → 196px to fit lineSpacing 8.
     this.add.text(panelX + 24, panelY + 52, bodyText, {
       fontFamily: FONTS.BODY,
-      fontSize: '17px',
+      fontSize: '18px',
       color: COLORS.PARCH.str,
-      lineSpacing: 6,
+      lineSpacing: 8,
     });
   }
 
@@ -168,7 +170,9 @@ class L3Scene extends Phaser.Scene {
   _buildQ1() {
     this._clearQArea();
 
-    const qY = 295;
+    // Q-area top moved from y=295 to y=320: the article panel ends at y=274,
+    // leaving only a 21px gap to the prompt. 25px more breathing room.
+    const qY = 320;
 
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Which of these statements are PREMISES of the argument?  (Tick all that apply)', {
@@ -324,7 +328,9 @@ class L3Scene extends Phaser.Scene {
 
   _buildQ2() {
     this._clearQArea();
-    const qY = 295;
+    // Q-area top moved from y=295 to y=320: the article panel ends at y=274,
+    // leaving only a 21px gap to the prompt. 25px more breathing room.
+    const qY = 320;
 
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Is this argument VALID or INVALID?', {
@@ -421,7 +427,9 @@ class L3Scene extends Phaser.Scene {
 
   _buildQ3() {
     this._clearQArea();
-    const qY = 295;
+    // Q-area top moved from y=295 to y=320: the article panel ends at y=274,
+    // leaving only a 21px gap to the prompt. 25px more breathing room.
+    const qY = 320;
 
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Is this argument SOUND or UNSOUND?', {
@@ -473,12 +481,11 @@ class L3Scene extends Phaser.Scene {
       announce('Correct — SOUND. Moving to question 4.', true);
       this._showReveal(
         'SOUND — correct.',
-        'SOUND means: VALID + true premises. The premises here align with established nutritional ' +
-        'science (the article cites peer-reviewed studies), and the reasoning is valid — so the argument ' +
-        'is sound.\n\n' +
-        'Why this question is harder than VALID/INVALID: soundness depends on the WORLD, not just the ' +
-        'argument\'s shape. You have to ask "are the premises actually true?" That move — interrogating ' +
-        'whether claimed evidence holds up — is exactly what Q4 will ask you to do next.',
+        'SOUND means two things together: the argument is VALID and the premises are TRUE.\n\n' +
+        'The premises here match established nutritional science. The reasoning is valid. So the argument is sound.\n\n' +
+        'Why this is harder than VALID/INVALID: soundness depends on the WORLD, not just the argument\'s shape. ' +
+        'You have to ask "are the premises actually true?"\n\n' +
+        'Q4 will ask you to do exactly this — check whether the evidence the article relies on actually holds up.',
         () => this._advanceToQ(4)
       );
     } else {
@@ -500,7 +507,9 @@ class L3Scene extends Phaser.Scene {
   _buildQ4() {
     this._clearQArea();
 
-    const qY = 295;
+    // Q-area top moved from y=295 to y=320: the article panel ends at y=274,
+    // leaving only a 21px gap to the prompt. 25px more breathing room.
+    const qY = 320;
 
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Which of these would be GOOD Socratic challenges to this article?  (Tick all that apply)', {
