@@ -43,23 +43,22 @@ class HubScene extends Phaser.Scene {
     g.lineStyle(1, COLORS.BRASS.num, 0.8);
     g.lineBetween(0, 80, GAME_DIM.W, 80);
 
-    this.add.text(40, 40, 'ARGUMENT OPERATING THEATRE', {
+    // Top-bar elements moved y=40 → y=54 so a 28px-tall title with origin
+    // (0, 0.5) clears the canvas top (y=0) by 40px breathing on letterboxed
+    // viewports.
+    this.add.text(40, 54, 'ARGUMENT OPERATING THEATRE', {
       fontFamily: FONTS.HERO,
       fontSize: '26px',
       color: COLORS.BRASS.str,
       letterSpacing: 3,
     }).setOrigin(0, 0.5);
 
-    // Pod identity (right side) — text right-anchored at canvas edge minus
-    // 20px gutter, badge sits immediately to its left. Original layout used
-    // left-anchored text at x=1845 with 22px Archivo Black, which overflows
-    // GAME_DIM.W (1920) by ~55px for a 4-letter pod code, clipping the label.
-    const podText = this.add.text(GAME_DIM.W - 20, 40, `POD: ${this.podCode}`, {
+    const podText = this.add.text(GAME_DIM.W - 20, 54, `POD: ${this.podCode}`, {
       fontFamily: FONTS.HERO,
       fontSize: '22px',
       color: COLORS.PARCH.str,
     }).setOrigin(1, 0.5);
-    this.add.image(GAME_DIM.W - 20 - podText.width - 12, 40,
+    this.add.image(GAME_DIM.W - 20 - podText.width - 12, 54,
       `badge_${this.state.badge || 0}`).setScale(0.6).setOrigin(1, 0.5);
   }
 
@@ -313,7 +312,9 @@ class HubScene extends Phaser.Scene {
     // Was at y=1048 with h=30 — orphaned 2px from canvas edge AND below the
     // dossier panel boundary (y=1040). Moved into the panel footer at y=988
     // with h=44 (meets 44×44 tap-target rule for primary actions).
-    this._addDomButton(50, 988, 340, 44,
+    // EXPORT button y=964 (was 988): _addDomButton centres at y+h/2 = 986;
+    // bottom = 986 + h/2 = 1008 — clears 1020 floor.
+    this._addDomButton(50, 964, 340, 44,
       '↗ EXPORT SAVE LINK · E',
       'Copy save URL to clipboard. Press E.',
       COLORS.STEEL.str,
@@ -355,7 +356,8 @@ class HubScene extends Phaser.Scene {
       box-shadow: 0 4px 16px rgba(0,0,0,0.5);
       pointer-events: none;
     `;
-    const dom = this.add.dom(960, 1010, el);
+    // Toast moved 1010 → 990 so its rendered bottom (~1011) clears the 1020 floor.
+    const dom = this.add.dom(960, 990, el);
     this.domNodes.push(dom);
     this.tweens.add({
       targets: dom, alpha: { from: 1, to: 0 },

@@ -139,7 +139,7 @@ class L1Scene extends Phaser.Scene {
     g.lineStyle(1, COLORS.L1_ACCENT.num, 0.9);
     g.lineBetween(0, 80, GAME_DIM.W, 80);
 
-    this.add.text(GAME_DIM.W / 2, 40, 'THE ARGUMENT LAB · Standard Form', {
+    this.add.text(GAME_DIM.W / 2, 54, 'THE ARGUMENT LAB · Standard Form', {
       fontFamily: FONTS.HERO,
       fontSize: '26px',
       color: COLORS.L1_ACCENT.str,
@@ -147,7 +147,7 @@ class L1Scene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this._addDomButton(
-      20, 12, 220, 56,
+      20, 22, 220, 56,
       '← BACK TO HUB',
       'Return to hub. Press Escape.',
       COLORS.BRASS.str,
@@ -264,7 +264,7 @@ class L1Scene extends Phaser.Scene {
     overlay.style.cssText = `
       position: fixed; inset: 0; background: rgba(0,0,0,0.87);
       display: flex; align-items: center; justify-content: center;
-      z-index: 1000; padding: 40px;
+      z-index: 1000; padding: 24px;
     `;
 
     overlay.innerHTML = `
@@ -272,9 +272,11 @@ class L1Scene extends Phaser.Scene {
         position: relative;
         background: ${COLORS.PANEL.str};
         color: ${COLORS.PARCH.str};
-        padding: 60px 64px 48px;
+        padding: 36px 48px 32px;
         max-width: 860px;
         width: 100%;
+        max-height: 88vh;
+        overflow-y: auto;
         border: 4px solid ${COLORS.BRASS.str};
         border-radius: 8px;
         font-family: ${FONTS.HEAD};
@@ -290,10 +292,10 @@ class L1Scene extends Phaser.Scene {
           font-size: 36px;
           color: ${COLORS.BRASS.str};
           letter-spacing: 2px;
-          margin-bottom: 28px;
+          margin-bottom: 16px;
         ">${opts.title}</h2>
 
-        <div style="font-size: 22px; line-height: 1.65; margin-bottom: 40px;">
+        <div style="font-size: 22px; line-height: 1.65; margin-bottom: 24px;">
           ${opts.bodyHTML}
         </div>
 
@@ -306,7 +308,7 @@ class L1Scene extends Phaser.Scene {
             font-family: ${FONTS.HERO};
             font-size: 26px;
             letter-spacing: 4px;
-            padding: 18px 56px;
+            padding: 14px 48px;
             cursor: pointer;
             transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
             outline-offset: 3px;
@@ -594,11 +596,11 @@ class L1Scene extends Phaser.Scene {
   }
 
   _drawCaseAButtons() {
-    // Buttons at y=985 — below the diagnostic banner (which sits at y=750-970
-    // when shown, with two-column near-miss rendering). Earlier they were at
-    // y=740 which collided with the banner top by ~50px.
+    // Buttons at y=952 — viewport-fit fix: was y=985, h=60, so dom centre
+    // was 1015 with bottom 1045 (clipped on 1020-floor viewports). Now
+    // dom centre 982, bottom 1012 — clears the floor.
     const submitDom = this._addDomButton(
-      GAME_DIM.W - 380, 985, 300, 60,
+      GAME_DIM.W - 380, 952, 300, 60,
       'SUBMIT ARGUMENT',
       'Submit your argument for evaluation.',
       COLORS.L1_ACCENT.str,
@@ -611,7 +613,7 @@ class L1Scene extends Phaser.Scene {
     this._trackDOM({ destroy: () => submitDom.destroy() });
 
     const resetDom = this._addDomButton(
-      80, 985, 200, 60,
+      80, 952, 200, 60,
       'RESET',
       'Return all cards to the pool.',
       COLORS.MUTED.str,
@@ -802,14 +804,16 @@ class L1Scene extends Phaser.Scene {
     const nCard = CASE_A_CARDS.find(card => card.id === n);
     const cCard = CASE_A_CARDS.find(card => card.id === c);
 
+    // Banner moved y=750 → y=720 (cards row 2 ends y=700, so 20px gap; banner
+    // ends y=940, leaving 12px clearance to the buttons at y=952).
     const bg = this._track(this.add.graphics());
     bg.fillStyle(0x3A0A0A, 0.9);
     bg.lineStyle(2, COLORS.L1_ACCENT.num, 0.8);
-    bg.fillRoundedRect(80, 750, GAME_DIM.W - 160, 220, 6);
-    bg.strokeRoundedRect(80, 750, GAME_DIM.W - 160, 220, 6);
+    bg.fillRoundedRect(80, 720, GAME_DIM.W - 160, 220, 6);
+    bg.strokeRoundedRect(80, 720, GAME_DIM.W - 160, 220, 6);
 
     // LEFT: standard-form rendering of the student's attempt
-    const sfX = 110, sfY = 778, sfWidth = 880;
+    const sfX = 110, sfY = 748, sfWidth = 880;
     const sfHeader = this._track(this.add.text(sfX, sfY, 'YOUR ATTEMPT:', {
       fontFamily: FONTS.HERO, ...TYPE.SMALL,
       color: COLORS.BRASS.str, letterSpacing: 3,
@@ -835,7 +839,7 @@ class L1Scene extends Phaser.Scene {
     // Vertical divider
     const div = this._track(this.add.graphics());
     div.lineStyle(1, COLORS.L1_ACCENT.num, 0.5);
-    div.lineBetween(1010, 770, 1010, 950);
+    div.lineBetween(1010, 740, 1010, 920);
 
     // RIGHT: diagnostic message — moved into right column
     const diagX = 1030, diagWidth = GAME_DIM.W - 1030 - 30;
@@ -1052,11 +1056,11 @@ class L1Scene extends Phaser.Scene {
   }
 
   _drawCaseBButtons() {
-    // Buttons at y=1010 — below the diagnostic banner that now sits at
-    // y=920-1000. Earlier they were at y=950, colliding with the banner
-    // (y=940-1060) by 50+px.
+    // Buttons at y=952 — viewport-fit fix: was y=1010, dom bottom 1070
+    // overflowing the 1080 canvas. Banner re-tightened to y=920, h=72
+    // so the buttons can sit at the same y as Case A.
     const submitDom = this._addDomButton(
-      GAME_DIM.W - 380, 1010, 300, 60,
+      GAME_DIM.W - 380, 952, 300, 60,
       'SUBMIT ARGUMENT',
       'Submit your inductive argument for evaluation.',
       COLORS.L1_ACCENT.str,
@@ -1069,7 +1073,7 @@ class L1Scene extends Phaser.Scene {
     this._trackDOM({ destroy: () => submitDom.destroy() });
 
     const resetDom = this._addDomButton(
-      80, 1010, 200, 60,
+      80, 952, 200, 60,
       'RESET',
       'Return all cards to the pool.',
       COLORS.MUTED.str,
@@ -1217,17 +1221,17 @@ class L1Scene extends Phaser.Scene {
 
   _showCaseBDiagnostic(message) {
     this._clearCaseBFeedback();
-    // Banner at y=920-1000 (h=80), TYPE.BODY 22px instead of LARGE 28 — fits
-    // the tight band between Case B's row-3 cards (end y=932 — banner overlaps
-    // by 12px, acceptable since cards are non-interactive at submit time) and
-    // the buttons at y=1010+.
+    // Banner now at y=820-900 (h=80) — overlaps cards row 3 (y=832-932)
+    // visually but cards are non-interactive at submit time. Sits 52px above
+    // the buttons at y=952 (Case A pattern). Was y=920 colliding with
+    // viewport-fit-corrected buttons at y=952.
     const bg = this._track(this.add.graphics());
     bg.fillStyle(0x3A0A0A, 0.9);
     bg.lineStyle(2, COLORS.L1_ACCENT.num, 0.8);
-    bg.fillRoundedRect(80, 920, GAME_DIM.W - 160, 80, 6);
-    bg.strokeRoundedRect(80, 920, GAME_DIM.W - 160, 80, 6);
+    bg.fillRoundedRect(80, 820, GAME_DIM.W - 160, 80, 6);
+    bg.strokeRoundedRect(80, 820, GAME_DIM.W - 160, 80, 6);
 
-    const txt = this._track(this.add.text(GAME_DIM.W / 2, 960, message, {
+    const txt = this._track(this.add.text(GAME_DIM.W / 2, 860, message, {
       fontFamily: FONTS.BODY,
       ...TYPE.BODY,
       color: '#FFB680',
@@ -1321,7 +1325,7 @@ class L1Scene extends Phaser.Scene {
         <div style="text-align:center; margin: 28px 0;">
           <img src="assets/images/briefing/sign_crocodile.jpg"
                alt="A 'Beware of Crocodiles' warning sign mounted on a post"
-               style="max-width: 460px; max-height: 240px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
+               style="max-width: 460px; max-height: 180px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
         </div>
 
         <p>The sign says <strong style="color:${COLORS.BRASS.str}">&#8220;Beware Crocodiles.&#8221;</strong>
@@ -1372,7 +1376,7 @@ class L1Scene extends Phaser.Scene {
       <div style="text-align:center; margin-bottom: 24px;">
         <img src="assets/images/briefing/sign_wet_floor.jpg"
              alt="A yellow A-frame 'Caution Wet Floor' sign on a tiled floor"
-             style="max-width: 460px; max-height: 240px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
+             style="max-width: 460px; max-height: 180px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
       </div>
 
       <p><strong style="color:${COLORS.BRASS.str};">&#8220;Caution &#8212; Wet Floor.&#8221;</strong>
@@ -1448,7 +1452,7 @@ class L1Scene extends Phaser.Scene {
       <div style="text-align:center; margin-bottom: 24px;">
         <img src="assets/images/briefing/sign_no_smoking.jpg"
              alt="A 'No Smoking' sign"
-             style="max-width: 420px; max-height: 280px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
+             style="max-width: 420px; max-height: 180px; border-radius: 6px; border: 2px solid ${COLORS.BRASS.str};" />
       </div>
 
       <p>The sign says <strong style="color:${COLORS.BRASS.str};">&#8220;No Smoking.&#8221;</strong>
@@ -2227,7 +2231,9 @@ class L1Scene extends Phaser.Scene {
   // ── KEYBOARD HINT (bottom of screen, phase-specific) ──────────────────────
 
   _drawKeyboardHint(msg) {
-    this._track(this.add.text(GAME_DIM.W / 2, GAME_DIM.H - 28, msg, {
+    // Keyboard hint y=GAME_DIM.H - 46 (was -28). 18px text bottom = 1070 was
+    // clipped by 50px on viewports with letterbox; 1052 sits 28px above floor.
+    this._track(this.add.text(GAME_DIM.W / 2, GAME_DIM.H - 46, msg, {
       fontFamily: FONTS.BODY,
       ...TYPE.SMALL,
       color: COLORS.MUTED.str,

@@ -436,7 +436,7 @@ class L2Scene extends Phaser.Scene {
     overlay.style.cssText = `
       position: fixed; inset: 0; background: rgba(0,0,0,0.87);
       display: flex; align-items: center; justify-content: center;
-      z-index: 1000; padding: 40px;
+      z-index: 1000; padding: 24px;
     `;
     document.body.appendChild(overlay);
 
@@ -447,9 +447,11 @@ class L2Scene extends Phaser.Scene {
           position: relative;
           background: ${COLORS.PANEL.str};
           color: ${COLORS.PARCH.str};
-          padding: 60px 64px 48px;
+          padding: 36px 48px 32px;
           max-width: 860px;
           width: 100%;
+          max-height: 88vh;
+          overflow-y: auto;
           border: 4px solid ${COLORS.L2_ACCENT.str};
           border-radius: 8px;
           font-family: ${FONTS.HEAD};
@@ -464,9 +466,9 @@ class L2Scene extends Phaser.Scene {
             font-size: 36px;
             color: ${COLORS.L2_ACCENT.str};
             letter-spacing: 2px;
-            margin: 0 0 28px;
+            margin: 0 0 16px;
           ">${p.title}</h2>
-          <div style="font-size: 22px; line-height: 1.65; margin-bottom: 40px;">
+          <div style="font-size: 22px; line-height: 1.65; margin-bottom: 24px;">
             ${p.bodyHTML}
           </div>
           <div style="text-align: right;">
@@ -478,7 +480,7 @@ class L2Scene extends Phaser.Scene {
               font-family: ${FONTS.HERO};
               font-size: 26px;
               letter-spacing: 4px;
-              padding: 18px 56px;
+              padding: 14px 48px;
               cursor: pointer;
               transition: background 0.15s ease, color 0.15s ease;
               outline-offset: 3px;
@@ -687,7 +689,7 @@ class L2Scene extends Phaser.Scene {
     const dom = this.add.dom(W / 2, 960, btn);
     this.domNodes.push(dom);
 
-    this.add.text(W / 2, 1010, 'Keyboard: 1/2/3 to select a card, then ENTER to place it', {
+    this.add.text(W / 2, 1002, 'Keyboard: 1/2/3 to select a card, then ENTER to place it', {
       fontFamily: FONTS.BODY,
       ...TYPE.SMALL,
       color: COLORS.MUTED.str,

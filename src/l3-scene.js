@@ -797,8 +797,10 @@ class L3Scene extends Phaser.Scene {
       panel.appendChild(retryBtn);
     }
 
-    // Position below the question area — y=870 centres in lower half
-    const dom = this.add.dom(GAME_DIM.W / 2, 900, panel);
+    // Position below the question area — y=808 centres reveal panel so its
+    // bottom (~1014 with up-to-412px content) clears the 1020 floor. Was 900
+    // which let the panel clip 86px past the canvas bottom.
+    const dom = this.add.dom(GAME_DIM.W / 2, 808, panel);
     this.domNodes.push(dom);
     this._revealDom = dom;
     this._revealVisible = true;

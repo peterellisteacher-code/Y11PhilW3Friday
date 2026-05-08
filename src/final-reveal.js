@@ -487,8 +487,10 @@ class FinalRevealScene extends Phaser.Scene {
     this._buildPrizeNote();
 
     // ── BACK TO HUB ─────────────────────────────────────────────────────────
+    // y=GAME_DIM.H - 112 (was -76): dom bottom = 994+52/2+52/2 = 1020 ✓
+    // Was bottom 1056 — overflowing by 36px.
     this._addDomButton(
-      40, GAME_DIM.H - 76, 240, 52,
+      40, GAME_DIM.H - 112, 240, 52,
       '← BACK TO HUB', 'Return to the hub', COLORS.STEEL.str,
       () => this.scene.start('HubScene', { podCode: this.podCode, state: this.state })
     );
@@ -600,13 +602,16 @@ class FinalRevealScene extends Phaser.Scene {
   }
 
   _buildExemplarPanel() {
-    // Panel y=620 → 624 (clears PRINT button at y=562+48 = 610). Body font
-    // bumped 15px → 18px (was below the 17px floor).
-    const PANEL_X = 40, PANEL_Y = 624, PANEL_W = 1180, PANEL_H = 400;
+    // Panel y=624, h=396 (was 400). Inner overflow-y:auto means content
+    // taller than the panel scrolls inside the panel. Bottom = 624+198+198
+    // — wait, dom origin is 0.5 so dom y = panelY + h/2 = 822, bottom = 1020.
+    const PANEL_X = 40, PANEL_Y = 624, PANEL_W = 1180, PANEL_H = 396;
 
     const exEl = document.createElement('div');
     exEl.style.cssText = `
       width: ${PANEL_W}px;
+      max-height: ${PANEL_H}px;
+      overflow-y: auto;
       background: ${COLORS.PANEL.str};
       border: 1px solid ${COLORS.MUTED.str};
       border-radius: 4px;
