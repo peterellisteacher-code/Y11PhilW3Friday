@@ -84,7 +84,7 @@ class FinalRevealScene extends Phaser.Scene {
       const col   = done ? COLORS.BRASS.str : COLORS.STEEL.str;
       this.add.text(GAME_DIM.W / 2, 420 + i * 64, `${icon}  ${instructions[i]}`, {
         fontFamily: FONTS.BODY,
-        fontSize: '24px',
+        ...TYPE.BODY,
         color: col,
       }).setOrigin(0.5);
     });
@@ -127,7 +127,7 @@ class FinalRevealScene extends Phaser.Scene {
 
     this.add.text(GAME_DIM.W / 2, 590, 'ENTER YOUR VAULT COMBINATION', {
       fontFamily: FONTS.HERO,
-      fontSize: '28px',
+      ...TYPE.LARGE,
       color: COLORS.BRASS.str,
       letterSpacing: 4,
     }).setOrigin(0.5);
@@ -465,7 +465,7 @@ class FinalRevealScene extends Phaser.Scene {
     }
     this.add.text(160, 45, `POD ${this.podCode} HAS UNLOCKED THE VAULT`, {
       fontFamily: FONTS.HERO,
-      fontSize: '30px',
+      ...TYPE.HUGE,
       color: COLORS.BRASS.str,
       letterSpacing: 3,
     }).setOrigin(0, 0.5);
@@ -473,7 +473,7 @@ class FinalRevealScene extends Phaser.Scene {
     this.add.text(GAME_DIM.W - 40, 45,
       `Stage 1 Philosophy · Folio Task 2 ready`, {
       fontFamily: FONTS.BODY,
-      fontSize: '18px',
+      ...TYPE.SMALL,
       color: COLORS.PARCH.str,
     }).setOrigin(1, 0.5);
 
@@ -621,7 +621,7 @@ class FinalRevealScene extends Phaser.Scene {
     exEl.innerHTML = `
       <div style="font-family:${FONTS.HERO}; font-size:17px; letter-spacing:3px;
                   color:${COLORS.BRASS.str}; margin-bottom:16px;">
-        WORTHY OF THE VAULT — A WORKED EXEMPLAR
+        AN ARGUMENT WORTH THE WORK
       </div>
 
       <div style="margin-bottom:12px;">
@@ -656,7 +656,7 @@ class FinalRevealScene extends Phaser.Scene {
       <div>
         <strong>What you&rsquo;ve practised:</strong> identifying premises (L1),
         judging validity (L2), assessing soundness (L3).
-        You now have the surgical tools to dissect ANY argument — political, ethical, scientific.
+        These three moves — find the premises, judge the form, test the truth — work on any argument you'll meet in school or out of it.
       </div>
     `;
 
@@ -680,7 +680,7 @@ class FinalRevealScene extends Phaser.Scene {
       transform: rotate(-2deg);
     `;
     prizeEl.innerHTML =
-      `&#127873; Your physical surprise awaits —<br>see Mr. Ellis to claim your pod&rsquo;s prize.`;
+      `&#127873; Your prize is waiting —<br>see Mr Ellis to collect it.`;
 
     const prizeDom = this.add.dom(1700, 810, prizeEl);
     this.domNodes.push(prizeDom);

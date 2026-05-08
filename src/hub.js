@@ -75,7 +75,7 @@ class HubScene extends Phaser.Scene {
 
     this.add.text(220, 128, 'EVIDENCE DOSSIER', {
       fontFamily: FONTS.HERO,
-      fontSize: '18px',
+      ...TYPE.SMALL,
       color: COLORS.BRASS.str,
       letterSpacing: 3,
     }).setOrigin(0.5);
@@ -192,7 +192,7 @@ class HubScene extends Phaser.Scene {
     // Label
     this.add.text(cx, y + 120, lesson.label, {
       fontFamily: FONTS.HERO,
-      fontSize: '19px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
       letterSpacing: 1,
       wordWrap: { width: doorW - 24 },
@@ -258,7 +258,7 @@ class HubScene extends Phaser.Scene {
 
     this.add.text(960, 868, 'VAULT COMBINATION', {
       fontFamily: FONTS.HERO,
-      fontSize: '18px',
+      ...TYPE.SMALL,
       color: COLORS.BRASS.str,
       letterSpacing: 3,
     }).setOrigin(0.5);
@@ -296,7 +296,7 @@ class HubScene extends Phaser.Scene {
       const filled = digits.filter(d => d).length;
       this.add.text(1580, 910, `${filled} / 3 DIGITS`, {
         fontFamily: FONTS.HERO,
-        fontSize: '20px',
+        ...TYPE.BODY,
         color: COLORS.STEEL.str,
         letterSpacing: 3,
       }).setOrigin(0.5);

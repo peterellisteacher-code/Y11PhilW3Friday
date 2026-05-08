@@ -64,16 +64,18 @@ class L3Scene extends Phaser.Scene {
     backBtn.type = 'button';
     backBtn.textContent = '← BACK TO HUB';
     backBtn.setAttribute('aria-label', 'Return to the hub');
+    // Back btn padding + font bumped so the rendered height clears the 44×44
+    // primary-action tap-target rule (was h≈35 with 6px padding + 15px font).
     backBtn.style.cssText = `
       background: transparent;
       color: ${COLORS.BRASS.str};
       border: 1px solid ${COLORS.BRASS.str};
       border-radius: 6px;
       font-family: ${FONTS.HERO};
-      font-size: 15px;
+      font-size: 16px;
       letter-spacing: 3px;
       cursor: pointer;
-      padding: 6px 18px;
+      padding: 12px 22px;
       outline-offset: 3px;
     `;
     backBtn.addEventListener('mouseenter', () => {
@@ -89,10 +91,10 @@ class L3Scene extends Phaser.Scene {
     const backDom = this.add.dom(120, 40, backBtn);
     this.domNodes.push(backDom);
 
-    // Title
+    // Title — bumped to 28px (TYPE.LARGE) for cross-scene consistency with L2's 28px title
     this.add.text(GAME_DIM.W / 2, 40, 'OPERATING THEATRE  ·  Op-Ed Autopsy', {
       fontFamily: FONTS.HERO,
-      fontSize: '24px',
+      ...TYPE.LARGE,
       color: COLORS.L3_ACCENT.str,
       letterSpacing: 4,
     }).setOrigin(0.5);
@@ -102,7 +104,7 @@ class L3Scene extends Phaser.Scene {
     // Rendered as Phaser text — updated each question advance
     this._qCounterText = this.add.text(GAME_DIM.W - 40, 40, 'Q 1 / 4', {
       fontFamily: FONTS.HERO,
-      fontSize: '22px',
+      ...TYPE.BODY,
       color: COLORS.PARCH.str,
     }).setOrigin(1, 0.5).setDepth(10);
   }
@@ -177,7 +179,7 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Which of these statements are PREMISES of the argument?  (Tick all that apply)', {
         fontFamily: FONTS.BODY,
-        fontSize: '28px',
+        ...TYPE.LARGE,
         color: COLORS.PARCH.str,
         wordWrap: { width: GAME_DIM.W - 240 },
         align: 'center',
@@ -289,8 +291,7 @@ class L3Scene extends Phaser.Scene {
         'the premises support.\n' +
         '  • "Chronic diseases are linked to poor diet…" is in the prose but explains WHY the premises ' +
         'matter, not the argument itself.\n\n' +
-        'Spotting the difference between "in the article" and "in the standard-form argument" is the ' +
-        'core skill of op-ed analysis.',
+        'Knowing the difference between what\'s IN the article and what\'s IN the standard-form argument is the move. That\'s what op-ed analysis hangs on.',
         () => this._advanceToQ(2)
       );
     } else {
@@ -335,7 +336,7 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Is this argument VALID or INVALID?', {
         fontFamily: FONTS.BODY,
-        fontSize: '28px',
+        ...TYPE.LARGE,
         color: COLORS.PARCH.str,
         align: 'center',
       }).setOrigin(0.5);
@@ -434,7 +435,7 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Is this argument SOUND or UNSOUND?', {
         fontFamily: FONTS.BODY,
-        fontSize: '28px',
+        ...TYPE.LARGE,
         color: COLORS.PARCH.str,
         align: 'center',
       }).setOrigin(0.5);
@@ -514,7 +515,7 @@ class L3Scene extends Phaser.Scene {
     const prompt = this.add.text(GAME_DIM.W / 2, qY,
       'Which of these would be GOOD Socratic challenges to this article?  (Tick all that apply)', {
         fontFamily: FONTS.BODY,
-        fontSize: '28px',
+        ...TYPE.LARGE,
         color: COLORS.PARCH.str,
         align: 'center',
         wordWrap: { width: GAME_DIM.W - 240 },
@@ -525,7 +526,7 @@ class L3Scene extends Phaser.Scene {
       'A good Socratic challenge engages the argument\'s logic, evidence, or assumptions — not the author\'s character or your personal preferences.', {
         fontFamily: FONTS.BODY,
         ...TYPE.SMALL,
-        color: COLORS.MUTED.str,
+        color: COLORS.PARCH.str,
         align: 'center',
         wordWrap: { width: 1000 },
       }).setOrigin(0.5);
@@ -663,7 +664,7 @@ class L3Scene extends Phaser.Scene {
           lines.push(`  ✓ Statement ${idx} — ${c.why}`);
         });
       }
-      lines.push('\nRemember: Socratic Method challenges terms, evidence, scope, or assumptions — not the person speaking.');
+      lines.push('\nSocratic Method challenges terms, evidence, scope, or assumptions — not the person speaking.');
       this._showReveal('Not quite — try again.', lines.join('\n'), null, true);
     }
   }

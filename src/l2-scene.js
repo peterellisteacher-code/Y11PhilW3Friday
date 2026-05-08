@@ -136,7 +136,7 @@ class L2Scene extends Phaser.Scene {
     // coloured to draw the eye, with wordWrap for long Q3 prompts.
     this._promptText = this.add.text(GAME_DIM.W / 2, 440, '', {
       fontFamily: FONTS.HERO,
-      fontSize: '28px',
+      ...TYPE.LARGE,
       color: COLORS.PARCH.str,
       letterSpacing: 2,
       wordWrap: { width: GAME_DIM.W - 240 },
@@ -279,7 +279,7 @@ class L2Scene extends Phaser.Scene {
 
     const reveals = [
       // Q1 (VALID) — Barbara: every dog is mammal + Rex is dog → Rex is mammal
-      "VALID — Rex IS a dog (P2). Every dog IS in the mammal category (P1). So Rex MUST be in the mammal category too. The conclusion has nowhere else to go.\n\nNotice: only ONE word changed between Q1 and Q2 — 'Rex is a dog' became 'Rex is a mammal'. That single change flipped a valid argument into an invalid one. That's why FORM matters, not just content.",
+      "VALID — Rex IS a dog (P2). Every dog IS in the mammal category (P1). So Rex MUST be in the mammal category too. The conclusion has nowhere else to go.\n\nOnly one word changed — 'Rex is a dog' became 'Rex is a mammal' — and a valid argument turned invalid. The shape did the work.",
       // Q2 (INVALID) — affirming the consequent: dog→mammal + Rex is mammal ≠ Rex is dog
       "INVALID — Rex being a mammal doesn't make Rex a dog. Plenty of mammals are NOT dogs (cats, whales, you). The argument REVERSES the rule from P1: 'every dog is a mammal' is NOT the same as 'every mammal is a dog'.\n\nThis is the same shape as 'every croissant is bread / I'm holding bread / ∴ I'm holding a croissant' — clearly wrong. P1 only points one way.",
     ];
@@ -289,7 +289,7 @@ class L2Scene extends Phaser.Scene {
       // Q1: chose INVALID for the valid Barbara syllogism
       "Re-check — Rex IS a dog (P2). Every dog IS a mammal (P1). So Rex MUST be a mammal. The argument is VALID.\n\nValidity isn't about whether the premises happen to be true in the world — it's about whether the conclusion FOLLOWS from them. Here, it does.",
       // Q2: chose VALID for the affirming-the-consequent
-      "Re-check — find a counter-example. Rex is a mammal (P2) — but lots of mammals aren't dogs. P1 says 'every dog is a mammal', not 'every mammal is a dog'. The argument reverses the direction of P1.\n\nCompare to Q1: only P2 changed (Rex is a dog → Rex is a mammal), and the verdict flipped. That's the lesson — FORM matters.",
+      "Re-check — find a counter-example. Rex is a mammal (P2) — but lots of mammals aren't dogs. P1 says 'every dog is a mammal', not 'every mammal is a dog'. The argument reverses the direction of P1.\n\nCompare to Q1: only P2 changed (Rex is a dog → Rex is a mammal), and the verdict flipped. Same shape, different verdict — that's what you're tracking.",
     ];
 
     const revealText = correct ? reveals[this._q] : wrongFeedback[this._q];
@@ -527,7 +527,7 @@ class L2Scene extends Phaser.Scene {
 
     this._dropLabel = this.add.text(W / 2, dzY + dzH / 2 - 18, 'COURT EXHIBIT', {
       fontFamily: FONTS.HERO,
-      fontSize: '18px',
+      ...TYPE.SMALL,
       color: COLORS.L2_ACCENT.str,
       letterSpacing: 4,
     }).setOrigin(0.5);
@@ -778,7 +778,7 @@ class L2Scene extends Phaser.Scene {
 
     this.add.text(
       GAME_DIM.W / 2, 750,
-      'A street-cleaner — exactly. A counter-example shows premises true, conclusion false. That\'s how you defeat invalid reasoning in court.',
+      'A street-cleaner does it. Premises true (it IS raining → wet streets, etc. — except now there\'s a cleaner). Conclusion false (the streets are wet but it\'s NOT raining). One case, argument defeated.',
       {
         fontFamily: FONTS.BODY,
         fontSize: '22px',
@@ -789,7 +789,7 @@ class L2Scene extends Phaser.Scene {
     ).setOrigin(0.5, 0);
 
     announce(
-      'Correct. A street-cleaner — exactly. A counter-example shows premises true, conclusion false. That\'s how you defeat invalid reasoning in court.',
+      'Correct. A street-cleaner does it. Premises true (it IS raining — wet streets, etc. — except now there\'s a cleaner). Conclusion false (the streets are wet but it\'s NOT raining). One case, argument defeated.',
       true
     );
 

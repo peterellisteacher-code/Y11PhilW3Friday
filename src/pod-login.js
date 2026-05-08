@@ -52,7 +52,7 @@ class PodLoginScene extends Phaser.Scene {
 
     const t1 = this.add.text(960, 260, 'ARGUMENT OPERATING THEATRE', {
       fontFamily: FONTS.HERO,
-      fontSize: '28px',
+      ...TYPE.LARGE,
       color: COLORS.BRASS.str,
       letterSpacing: 4,
     }).setOrigin(0.5);
@@ -60,7 +60,7 @@ class PodLoginScene extends Phaser.Scene {
 
     const t2 = this.add.text(960, 310, 'Patient Intake — Pod Identification', {
       fontFamily: FONTS.BODY,
-      fontSize: '22px',
+      ...TYPE.BODY,
       color: COLORS.STEEL.str,
     }).setOrigin(0.5);
     this._loginTexts.push(t2);
@@ -102,45 +102,55 @@ class PodLoginScene extends Phaser.Scene {
     sep.lineBetween(620, 705, 1300, 705);
     this._loginTexts.push(sep);
 
-    // Heading — primary feedback / instruction tier
+    // Heading — demoted to BODY (22px) to remove competing focal point
+    // alongside POD CODE 32px and AQUA/BOLD/CALM/FIRE boxes 32px.
     const heading = this.add.text(960, 745,
       'CHOOSE A POD — negotiate with your group', {
         fontFamily: FONTS.HERO,
-        ...TYPE.LARGE,
+        ...TYPE.BODY,
         color: COLORS.BRASS.str,
         letterSpacing: 2,
       }).setOrigin(0.5);
     this._loginTexts.push(heading);
 
-    // 4 pod-code boxes (clickable)
+    // 4 pod-code boxes — DOM <button>s so they get keyboard focus + Tab
+    // order natively (the layout audit's biggest accessibility gap was
+    // that the previous Phaser-zone version had no keyboard parity).
+    // Each button also styles itself via :focus-visible so a Tab user
+    // can SEE which pod they're about to select.
     codes.forEach((code, i) => {
       const x = startX + i * (boxW + gap);
 
-      const boxG = this.add.graphics();
-      const drawBox = (hovered) => {
-        boxG.clear();
-        boxG.fillStyle(hovered ? 0x1A1A30 : 0x12121A);
-        boxG.fillRoundedRect(x, boxY, boxW, boxH, 6);
-        boxG.lineStyle(2, COLORS.BRASS.num, hovered ? 1 : 0.7);
-        boxG.strokeRoundedRect(x, boxY, boxW, boxH, 6);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = code;
+      btn.setAttribute('aria-label', `Choose pod ${code}`);
+      btn.style.cssText = `
+        width: ${boxW}px; height: ${boxH}px;
+        background: #12121A;
+        color: ${COLORS.PARCH.str};
+        border: 2px solid ${COLORS.BRASS.str};
+        border-radius: 6px;
+        font-family: ${FONTS.HERO};
+        font-size: 32px;
+        letter-spacing: 4px;
+        cursor: pointer;
+        outline-offset: 4px;
+        transition: background 0.15s, border-color 0.15s;
+      `;
+      const setHover = (hovered) => {
+        btn.style.background  = hovered ? '#1A1A30' : '#12121A';
+        btn.style.borderColor = hovered ? COLORS.PARCH.str : COLORS.BRASS.str;
       };
-      drawBox(false);
-      this._loginTexts.push(boxG);
+      btn.addEventListener('mouseenter', () => setHover(true));
+      btn.addEventListener('mouseleave', () => setHover(false));
+      btn.addEventListener('focus',      () => setHover(true));
+      btn.addEventListener('blur',       () => setHover(false));
+      btn.addEventListener('click',      () => this._selectPodCode(code));
 
-      const codeText = this.add.text(x + boxW / 2, boxY + boxH / 2, code, {
-        fontFamily: FONTS.HERO,
-        fontSize: '32px',
-        color: COLORS.PARCH.str,
-        letterSpacing: 4,
-      }).setOrigin(0.5);
-      this._loginTexts.push(codeText);
-
-      const zone = this.add.zone(x + boxW / 2, boxY + boxH / 2, boxW, boxH)
-        .setInteractive({ useHandCursor: true });
-      zone.on('pointerover', () => drawBox(true));
-      zone.on('pointerout',  () => drawBox(false));
-      zone.on('pointerdown', () => this._selectPodCode(code));
-      this._loginTexts.push(zone);
+      const dom = this.add.dom(x + boxW / 2, boxY + boxH / 2, btn);
+      this.domNodes.push(dom);
+      this._loginTexts.push(dom);
     });
 
     // Group-formation rules

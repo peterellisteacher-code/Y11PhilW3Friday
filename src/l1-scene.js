@@ -360,7 +360,7 @@ class L1Scene extends Phaser.Scene {
       bodyHTML: `
         <p>Every argument has two parts: <strong style="color:${COLORS.BRASS.str}">PREMISES</strong>
         (the reasons given) and a <strong style="color:${COLORS.BRASS.str}">CONCLUSION</strong>
-        (the claim being defended). Premises do the work; the conclusion is what they're working towards.</p>
+        (the claim being defended). The premises do the work. The conclusion is where they end up.</p>
       `,
       btnLabel: 'NEXT →',
       onNext: () => this._transitionTo('briefing-a-2'),
@@ -396,7 +396,7 @@ class L1Scene extends Phaser.Scene {
             <strong style="color:${COLORS.BRASS.str}">∴ C:</strong> Socrates is mortal.
           </div>
         </div>
-        <p>The major sets the category. The minor places Socrates inside it. The conclusion has nowhere else to go.</p>
+        <p>The major names the category. The minor puts Socrates inside it. So the conclusion has to be true.</p>
       `,
       btnLabel: 'NEXT →',
       onNext: () => this._transitionTo('briefing-a-3'),
@@ -429,7 +429,7 @@ class L1Scene extends Phaser.Scene {
             <strong style="color:${COLORS.L1_ACCENT.str}">∴ C:</strong> Garfield is a reptile.
           </div>
         </div>
-        <p>The major premise is <em>false</em> — cats aren't reptiles. But the structure is VALID:
+        <p>P1 is <em>false</em> — cats aren't reptiles. But the SHAPE of the argument is valid:
         <em>if</em> cats were reptiles, Garfield would be one too. Validity is about whether the conclusion FOLLOWS,
         not whether the premises happen to be true.</p>
         <p style="margin-top:18px;">Your job in Case A: build a valid argument from the cards provided.
@@ -512,7 +512,7 @@ class L1Scene extends Phaser.Scene {
 
       this._track(this.add.text(def.x + slotW / 2, y + 20, def.label, {
         fontFamily: FONTS.HERO,
-        fontSize: '17px',
+        ...TYPE.SMALL,
         color: COLORS.L1_ACCENT.str,
         letterSpacing: 3,
       }).setOrigin(0.5, 0));
@@ -787,7 +787,7 @@ class L1Scene extends Phaser.Scene {
     if (nCard && nCard.kind === 'conclusion') {
       return 'That card in the minor slot is actually a conclusion. A minor premise gives a specific fact — move it to the conclusion slot.';
     }
-    return 'Check whether each premise actually supports your conclusion. The premises must work together to FORCE the conclusion — that\'s what makes a deductive argument valid.';
+    return 'Check whether each premise actually supports your conclusion. The premises must work together so the conclusion HAS to follow. If they don\'t, the argument isn\'t deductively valid.';
   }
 
   _showCaseADiagnostic(message) {
@@ -959,7 +959,7 @@ class L1Scene extends Phaser.Scene {
 
       this._track(this.add.text(x + slotW / 2, premiseY + 18, `PREMISE ${i + 1}`, {
         fontFamily: FONTS.HERO,
-        fontSize: '17px',
+        ...TYPE.SMALL,
         color: COLORS.L1_ACCENT.str,
         letterSpacing: 3,
       }).setOrigin(0.5, 0));
@@ -987,7 +987,7 @@ class L1Scene extends Phaser.Scene {
 
     this._track(this.add.text(cSlotX + slotW / 2, conclusionY + 18, 'CONCLUSION', {
       fontFamily: FONTS.HERO,
-      fontSize: '17px',
+      ...TYPE.SMALL,
       color: COLORS.L1_ACCENT.str,
       letterSpacing: 3,
     }).setOrigin(0.5, 0));
@@ -1313,7 +1313,7 @@ class L1Scene extends Phaser.Scene {
       titleId: 'briefing-c-title',
       title: 'Unstated premises',
       bodyHTML: `
-        <p>Sometimes an argument leaves a premise unsaid because the speaker assumes you'll fill it in yourself.
+        <p>Sometimes an argument skips a premise. The writer assumes you'll fill it in yourself.
         That hidden piece is called an <strong style="color:${COLORS.BRASS.str}">UNSTATED PREMISE</strong>
         (or implied premise). To analyse the argument properly, you have to surface it — otherwise you can't tell
         whether the argument actually holds together.</p>
@@ -1594,7 +1594,7 @@ class L1Scene extends Phaser.Scene {
       this._drawSlotGraphic(g, sx, y, slotW, slotH, null);
 
       this._track(this.add.text(sx + 16, y + 16, label, {
-        fontFamily: FONTS.HERO, fontSize: '18px',
+        fontFamily: FONTS.HERO, ...TYPE.SMALL,
         color: COLORS.L1_ACCENT.str, letterSpacing: 3,
       }));
 
@@ -1918,8 +1918,7 @@ class L1Scene extends Phaser.Scene {
       `The slots are now filled with the correct cards.\n\n` +
       `The UNSTATED premise — the one that wasn't in the original prose but is needed ` +
       `for the argument to work — is "${unstatedText.slice(0, 90)}${unstatedText.length > 90 ? '…' : ''}"\n\n` +
-      `This is the move you'll need on the Standard Form Test: surface the moral or evaluative ` +
-      `premise the writer assumes you'll fill in.`;
+      `On the test, your job is the same. Spot the hidden premise the writer leaves out — usually a value claim ("we should…", "this is wrong").`;
 
     this._track(this.add.text(GAME_DIM.W / 2, py + 90, explainText, {
       fontFamily: FONTS.BODY, ...TYPE.BODY,
